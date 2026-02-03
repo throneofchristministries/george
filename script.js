@@ -45,3 +45,9 @@ date.value="";
 video.value="";
 audio.value="";
 }
+div.innerHTML = `
+  <h3>${m.title}</h3>
+  <p>Date: ${m.date}</p>
+  ${m.video ? `<iframe src="${m.video}" allowfullscreen style="width:100%; height:200px;"></iframe>` : ""}
+  ${m.audio ? `<iframe src="${m.audio}" style="width:100%; height:60px;"></iframe>` : ""}
+`;
