@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programs Admin</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<h2>Programs Upload Panel</h2>
+
+<div id="login">
+<input id="pass" type="password" placeholder="Admin Password">
+<button onclick="login()">Login</button>
+</div>
+
+<div id="panel" style="display:none">
+<input id="title" placeholder="Program Title">
+<input id="date" type="date">
+<input id="flyer" placeholder="Flyer Image URL (Imgur / Drive / Firebase)">
+<input id="link" placeholder="Optional: Link (Facebook live / registration)">
+<button onclick="save()">Save Program</button>
+</div>
+
+<script>
+  // ======= Firebase Setup =======
+  const firebaseConfig = {
+    apiKey: "AIzaSyBVkn_LvrbOFKmZLoJxMsrZXqugUQvml74",
+    authDomain: "throneofchristministries-6a88a.firebaseapp.com",
+    projectId: "throneofchristministries-6a88a",
+    storageBucket: "throneofchristministries-6a88a.firebasestorage.app",
+    messagingSenderId: "970066493474",
+    appId: "1:970066493474:web:99d8f66402206b90998a7b"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // ======= Admin Password =======
+  const ADMIN_PASSWORD = "1234"; // Change if needed
+
+  const loginDiv = document.getElementById("login");
+  const panelDiv = document.getElementById("panel");
+  const passInput = document.getElementById("pass");
+
+  function login(){
+    if(passInput.value === ADMIN_PASSWORD){
+      panelDiv.style.display = "block";
+      loginDiv.style.display = "none";
+    } else {
+      alert("Wrong password!");
+    }
+  }
+
+  const titleInput = document.getElementById("title");
+  const dateInput = document.getElementById("date");
+  const flyerInput = document.getElementById("flyer");
+  const linkInput = document.getElementById("link");
+
+  function save(){
+    if(titleInput.value === "" || dateInput.value === "" || flyerInput.value === ""){
+      alert("Please fill at least Title, Date and Flyer URL");
+      return;
+    }
+
+    db.collection("programs").add({
+      title: titleInput.value,
+      date: dateInput.value,
+      flyer: flyerInput.value,
+      link: linkInput.value
+    }).then(() => {
+      alert("Program saved!");
+      titleInput.value = "";
+      dateInput.value = "";
+      flyerInput.value = "";
+      linkInput.value = "";
+    }).catch(err => alert("Error: "+err));
+  }
+</script>
+
+</body>
+</html>
