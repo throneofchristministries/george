@@ -5,8 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Throne of Christ Ministries</title>
 <link rel="stylesheet" href="style.css">
-</head>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+</head>
 <body>
 
 <header>
@@ -80,26 +84,11 @@ raising disciples, and transforming lives through prayer, teaching, and outreach
 </div>
 
 <div id="messages">
-
-<!-- MESSAGE SAMPLE -->
-<div class="message" data-date="2026-01-10">
-<h3>Sunday Service – Faith in Christ</h3>
-<p>Date: 10 Jan 2026</p>
-
-<!-- Facebook Video -->
-<iframe src="https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/facebook/videos/10153231379946729/"
-allowfullscreen></iframe>
-
-<!-- Google Drive Audio -->
-<iframe src="https://drive.google.com/file/d/FILEID/preview"></iframe>
-</div>
-
-<!-- COPY ABOVE BLOCK FOR NEW MESSAGES -->
-
+<!-- Messages will be loaded dynamically from Firebase -->
 </div>
 
 <p class="note">
-To add new messages: copy one message block, change title, date, Facebook link and Drive audio link.
+Messages appear automatically. Use admin panel to add new messages.
 </p>
 
 </section>
@@ -128,28 +117,62 @@ To add new messages: copy one message block, change title, date, Facebook link a
 </footer>
 
 <script>
-const searchInput = document.getElementById("searchInput");
-const dateInput = document.getElementById("dateInput");
-const messages = document.querySelectorAll(".message");
+  // ======= Firebase Setup =======
+  const firebaseConfig = {
+    apiKey: "AIzaSyBVkn_LvrbOFKmZLoJxMsrZXqugUQvml74",
+    authDomain: "throneofchristministries-6a88a.firebaseapp.com",
+    projectId: "throneofchristministries-6a88a",
+    storageBucket: "throneofchristministries-6a88a.firebasestorage.app",
+    messagingSenderId: "970066493474",
+    appId: "1:970066493474:web:99d8f66402206b90998a7b"
+  };
 
-function filterMessages(){
-const text = searchInput.value.toLowerCase();
-const date = dateInput.value;
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-messages.forEach(msg=>{
-const title = msg.innerText.toLowerCase();
-const msgDate = msg.getAttribute("data-date");
+  const messagesDiv = document.getElementById("messages");
+  const searchInput = document.getElementById("searchInput");
+  const dateInput = document.getElementById("dateInput");
 
-if((title.includes(text)) && (date==="" || msgDate===date)){
-msg.style.display="block";
-}else{
-msg.style.display="none";
-}
-});
-}
+  let messagesData = [];
 
-searchInput.addEventListener("keyup", filterMessages);
-dateInput.addEventListener("change", filterMessages);
+  // ======= Load messages from Firebase =======
+  db.collection("messages").orderBy("date", "desc").onSnapshot(snapshot => {
+    messagesData = [];
+    messagesDiv.innerHTML = "";
+    snapshot.forEach(doc => {
+      const m = doc.data();
+      messagesData.push(m);
+      messagesDiv.innerHTML += `
+        <div class="message" data-date="${m.date}">
+          <h3>${m.title}</h3>
+          <p>Date: ${m.date}</p>
+          <iframe src="${m.video}" allowfullscreen></iframe>
+          <iframe src="${m.audio}"></iframe>
+        </div>`;
+    });
+  });
+
+  // ======= Search Function =======
+  function filterMessages(){
+    const text = searchInput.value.toLowerCase();
+    const date = dateInput.value;
+
+    messagesDiv.querySelectorAll(".message").forEach(msg => {
+      const title = msg.innerText.toLowerCase();
+      const msgDate = msg.getAttribute("data-date");
+
+      if(title.includes(text) && (date === "" || msgDate === date)){
+        msg.style.display = "block";
+      } else {
+        msg.style.display = "none";
+      }
+    });
+  }
+
+  searchInput.addEventListener("keyup", filterMessages);
+  dateInput.addEventListener("change", filterMessages);
 </script>
 
 </body>
