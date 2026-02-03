@@ -17,12 +17,13 @@ h2 { text-align:center; }
 input, textarea, select, button { padding:10px; margin:5px 0; width:100%; border-radius:5px; border:1px solid #ccc;}
 button { background:#0a2e5d; color:#ffd700; font-weight:bold; cursor:pointer; transition:0.3s;}
 button:hover { background:#003366; color:#fff; }
-.tab { display:flex; gap:10px; justify-content:center; margin-bottom:20px; }
-.tab button { flex:1; }
+.tab { display:flex; gap:10px; justify-content:center; margin-bottom:20px; flex-wrap:wrap; }
+.tab button { flex:1; min-width:120px; }
 .section { display:none; background:white; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
 .section.active { display:block; }
 .item { border:1px solid #ccc; padding:10px; margin:10px 0; border-radius:6px; display:flex; justify-content:space-between; align-items:center;}
 .item button { width:auto; padding:5px 10px; font-size:0.9rem;}
+img#currentLogo { max-width:150px; display:block; margin-top:10px; border:1px solid #ccc; padding:5px; border-radius:6px;}
 </style>
 </head>
 <body>
@@ -44,6 +45,7 @@ button:hover { background:#003366; color:#fff; }
     <button onclick="showSection('programsSec')">Programs</button>
     <button onclick="showSection('testimonialsSec')">Testimonials</button>
     <button onclick="showSection('logoSec')">Church Logo</button>
+    <button onclick="showSection('previewSec')">Live Preview</button>
   </div>
 
   <!-- Messages Section -->
@@ -87,10 +89,17 @@ button:hover { background:#003366; color:#fff; }
   <!-- Church Logo Section -->
   <div id="logoSec" class="section">
     <h3>Upload Church Logo</h3>
-    <input type="file" id="logoFile">
+    <input type="file" id="logoFile" accept="image/*">
     <button onclick="uploadLogo()">Upload Logo</button>
     <h4>Current Logo</h4>
-    <img id="currentLogo" src="" alt="Logo" style="max-width:150px; display:block; margin-top:10px;">
+    <img id="currentLogo" src="" alt="Logo">
+  </div>
+
+  <!-- Live Preview Section -->
+  <div id="previewSec" class="section">
+    <h3>Live Website Preview</h3>
+    <button onclick="refreshPreview()">Refresh Preview</button>
+    <iframe id="previewFrame" src="https://YOUR_PUBLIC_SITE_URL_HERE" style="width:100%; height:600px; border:1px solid #ccc; margin-top:10px;"></iframe>
   </div>
 
 </div>
@@ -110,7 +119,7 @@ button:hover { background:#003366; color:#fff; }
   const storage = firebase.storage();
 
   // ===== Admin Password =====
-  const ADMIN_PASSWORD = "1234"; // CHANGE THIS
+  const ADMIN_PASSWORD = "1234"; 
   const loginDiv = document.getElementById("login");
   const panelDiv = document.getElementById("panel");
   const passInput = document.getElementById("pass");
@@ -140,9 +149,7 @@ button:hover { background:#003366; color:#fff; }
     const date = document.getElementById("date").value;
     const video = document.getElementById("video").value;
     const audio = document.getElementById("audio").value;
-
     if(!title || !date || !video || !audio){ alert("Fill all fields"); return; }
-
     db.collection("messages").add({title, date, video, audio})
       .then(()=>{ alert("Message saved!"); loadMessages(); 
         document.getElementById("title").value = "";
@@ -172,9 +179,7 @@ button:hover { background:#003366; color:#fff; }
     const date = document.getElementById("progDate").value;
     const flyer = document.getElementById("progFlyer").value;
     const link = document.getElementById("progLink").value;
-
     if(!title || !date || !flyer){ alert("Fill required fields"); return; }
-
     db.collection("programs").add({title, date, flyer, link})
       .then(()=>{ alert("Program saved!"); loadPrograms();
         document.getElementById("progTitle").value = "";
@@ -203,9 +208,7 @@ button:hover { background:#003366; color:#fff; }
     const name = document.getElementById("testName").value;
     const message = document.getElementById("testMessage").value;
     const photo = document.getElementById("testPhoto").value;
-
     if(!name || !message){ alert("Fill required fields"); return; }
-
     db.collection("testimonials").add({name, message, photo})
       .then(()=>{ alert("Testimonial saved!"); loadTestimonials();
         document.getElementById("testName").value = "";
@@ -244,12 +247,21 @@ button:hover { background:#003366; color:#fff; }
   function uploadLogo(){
     const file = document.getElementById("logoFile").files[0];
     if(!file){ alert("Select a file"); return; }
-    const ref = storage.ref('logo/' + file.name);
-    ref.put(file).then(()=> ref.getDownloadURL()).then(url=>{
-      db.collection("settings").doc("logo").set({url});
-      loadLogo();
-      alert("Logo uploaded!");
-    });
+    const ref = storage.ref('logo/church_logo.jpeg'); // always overwrite with same name
+    const uploadTask = ref.put(file);
+
+    uploadTask.on('state_changed',
+      snapshot => { /* optional progress */ },
+      error => { alert("Upload error: " + error.message); },
+      () => {
+        uploadTask.snapshot.ref.getDownloadURL().then(url=>{
+          db.collection("settings").doc("logo").set({url}).then(()=>{
+            loadLogo();
+            alert("Logo uploaded successfully!");
+          });
+        });
+      }
+    );
   }
 
   function loadLogo(){
@@ -259,21 +271,13 @@ button:hover { background:#003366; color:#fff; }
       }
     });
   }
-<!-- Add this inside your tabs -->
-<button onclick="showSection('previewSec')">Live Preview</button>
 
-<!-- Live Preview Section -->
-<div id="previewSec" class="section">
-  <h3>Live Website Preview</h3>
-  <button onclick="refreshPreview()">Refresh Preview</button>
-  <iframe id="previewFrame" src="https://YOUR_PUBLIC_SITE_URL_HERE" style="width:100%; height:600px; border:1px solid #ccc; margin-top:10px;"></iframe>
-</div>
-
-<script>
+  // ===== Live Preview =====
   function refreshPreview(){
     const frame = document.getElementById("previewFrame");
-    frame.src = frame.src; // reload iframe to show latest changes
+    frame.src = frame.src; 
   }
+
 </script>
 </body>
 </html>
