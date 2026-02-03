@@ -342,16 +342,35 @@ function filterMessages(){
 searchInput.addEventListener("keyup", filterMessages);
 dateInput.addEventListener("change", filterMessages);
 
-// ===== Testimonial Slider =====
-const testimonials = document.querySelectorAll(".testimonial-slide");
-let tIndex = 0;
-function showTestimonial(){
-  testimonials.forEach(t=> t.classList.remove("active"));
-  testimonials[tIndex].classList.add("active");
-  tIndex = (tIndex + 1) % testimonials.length;
-  setTimeout(showTestimonial, 6000);
+// ===== Testimonials Slider =====
+const testimonialSlider = document.getElementById("testimonialSlider");
+
+function loadTestimonials() {
+  db.collection("testimonials").get().then(snapshot => {
+    testimonialSlider.innerHTML = ""; // clear old slides
+    snapshot.forEach(doc => {
+      const t = doc.data();
+      const div = document.createElement("div");
+      div.className = "testimonial-slide";
+      div.innerHTML = `<p>"${t.message}"</p><strong>- ${t.name}</strong>`;
+      testimonialSlider.appendChild(div);
+    });
+
+    // Activate slider if there are testimonials
+    const slides = testimonialSlider.querySelectorAll(".testimonial-slide");
+    if(slides.length > 0){
+      let tIndex = 0;
+      slides[tIndex].classList.add("active");
+      setInterval(()=>{
+        slides.forEach(s => s.classList.remove("active"));
+        tIndex = (tIndex + 1) % slides.length;
+        slides[tIndex].classList.add("active");
+      }, 6000);
+    }
+  });
 }
-showTestimonial();
+
+loadTestimonials();
 </script>
 
 </body>
