@@ -74,6 +74,7 @@ header nav a:hover { color:#ffd700; }
 #media h2 { margin-bottom:30px; font-size:2rem; }
 #media .search-box { margin-bottom:20px; }
 #media input { padding:8px; margin:5px; border-radius:6px; border:1px solid #ccc; }
+.message iframe { width:100%; max-width:560px; height:315px; border:none; }
 
 /* Contact */
 #contact { padding:50px 20px; text-align:center; background:white; }
@@ -90,6 +91,7 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
 @media(max-width:768px){
   .cards, .programs-carousel, #quick-links div { flex-direction:column; align-items:center; }
   #quick-links a { width:80%; margin:auto; }
+  .message iframe { height:200px; }
 }
 </style>
 </head>
@@ -217,7 +219,7 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
   </form>
   <div class="info">
     <p>📍 Location: Ghana</p>
-    <p>📞 Phone: +233 244360246 , +233 553346520, +233 551737175 , +233 204655510</p>
+    <p>📞 Phone: +233 244360246 , +233 553346520, +233 551737175 , 233 204655510</p>
     <p>✉ Email: throneofchristministries2020@gmail.com</p>
   </div>
 </section>
@@ -255,8 +257,6 @@ crossfadeSlides();
 const programsCarousel = document.getElementById("programsCarousel");
 const btnLeft = document.querySelector(".carousel-btn.left");
 const btnRight = document.querySelector(".carousel-btn.right");
-let carouselPaused = false;
-
 db.collection("programs").orderBy("date","asc").onSnapshot(snapshot=>{
     programsCarousel.innerHTML="";
     snapshot.forEach(doc=>{
@@ -272,9 +272,6 @@ db.collection("programs").orderBy("date","asc").onSnapshot(snapshot=>{
         </div>`;
     });
 });
-
-programsCarousel.addEventListener("mouseenter",()=>{carouselPaused=true;});
-programsCarousel.addEventListener("mouseleave",()=>{carouselPaused=false;});
 btnLeft.addEventListener("click", ()=>{ programsCarousel.scrollLeft -= 260; });
 btnRight.addEventListener("click", ()=>{ programsCarousel.scrollLeft += 260; });
 
@@ -294,7 +291,7 @@ function loadMessages() {
       div.innerHTML = `
         <h3>${m.title}</h3>
         <p>Date: ${m.date}</p>
-        ${m.video ? `<iframe src="${m.video}" allowfullscreen style="width:100%; height:200px;"></iframe>` : ""}
+        ${m.video ? m.video : ""}
         ${m.audio ? `<audio controls style="width:100%;" src="${m.audio}"></audio>` : ""}
       `;
       messagesDiv.appendChild(div);
