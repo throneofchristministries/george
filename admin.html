@@ -259,6 +259,21 @@ button:hover { background:#003366; color:#fff; }
       }
     });
   }
+<!-- Add this inside your tabs -->
+<button onclick="showSection('previewSec')">Live Preview</button>
+
+<!-- Live Preview Section -->
+<div id="previewSec" class="section">
+  <h3>Live Website Preview</h3>
+  <button onclick="refreshPreview()">Refresh Preview</button>
+  <iframe id="previewFrame" src="https://YOUR_PUBLIC_SITE_URL_HERE" style="width:100%; height:600px; border:1px solid #ccc; margin-top:10px;"></iframe>
+</div>
+
+<script>
+  function refreshPreview(){
+    const frame = document.getElementById("previewFrame");
+    frame.src = frame.src; // reload iframe to show latest changes
+  }
 </script>
 </body>
 </html>
