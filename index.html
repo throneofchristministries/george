@@ -11,60 +11,32 @@
 
 <style>
 /* ===== General ===== */
-body { margin:0; font-family: Arial, sans-serif; background:#f8f9fa; color:#333; scroll-behavior: smooth; }
-header { background:#003366; color:white; padding:15px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:999; }
+body { margin:0; font-family: Arial, sans-serif; background:#f8f9fa; color:#333; scroll-behavior:smooth; }
+
+/* ===== Header ===== */
+header { background:#0a2e5d; color:white; padding:15px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:999; }
 header .logo { font-size:1.5rem; font-weight:bold; }
 header nav a { color:white; margin-left:15px; text-decoration:none; font-weight:bold; transition:0.3s; }
 header nav a:hover { color:#ffd700; }
 
-/* ===== Hero Section with Background Slideshow ===== */
-.hero {
-  position: relative;
-  text-align: center;
-  padding: 150px 20px;
-  color: white;
-  overflow: hidden;
-}
-.hero h1 { font-size: 3rem; margin-bottom: 10px; position: relative; z-index:2; }
-.hero p { font-size: 1.2rem; margin-bottom: 20px; position: relative; z-index:2; }
-.hero .buttons a {
-  display: inline-block;
-  margin: 5px;
-  padding: 10px 20px;
-  background: rgba(0,123,255,0.8);
-  color: white;
-  border-radius: 6px;
-  text-decoration: none;
-  transition: 0.3s;
-  z-index: 2;
-  position: relative;
-}
-.hero .buttons a:hover { background: rgba(0,86,179,0.9); }
+/* ===== Hero Section ===== */
+.hero { position: relative; text-align: center; height:80vh; color: white; display:flex; flex-direction: column; justify-content:center; align-items:center; overflow:hidden; }
+.hero::after { content:""; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1; }
 
-/* Background Slideshow */
-.hero::before {
-  content: "";
-  position: absolute;
-  top:0; left:0;
-  width:100%; height:100%;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  animation: bgFade 16s infinite;
-  z-index: 1;
-}
-@keyframes bgFade {
-  0%   { opacity:1; background-image: url('theme.jpeg'); }
-  25%  { opacity:1; background-image: url('join us.jpeg'); }
-  50%  { opacity:1; background-image: url('past pic.jpeg'); }
-  75%  { opacity:1; background-image: url('curch.jpeg'); }
-  100% { opacity:1; background-image: url('theme.jpeg'); }
-}
+.hero h1, .hero p, .hero .buttons { position: relative; z-index:2; }
+.hero h1 { font-size:3rem; margin-bottom:10px; }
+.hero p { font-size:1.3rem; margin-bottom:20px; }
+.hero .buttons a { display:inline-block; margin:5px; padding:12px 25px; background:#ffd700; color:#0a2e5d; border-radius:8px; text-decoration:none; font-weight:bold; transition:0.3s; }
+.hero .buttons a:hover { background:#e6c200; color:#fff; }
+
+/* ===== Slideshow Images ===== */
+.hero img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:1s; z-index:0; }
+.hero img.active { opacity:1; }
 
 /* ===== About ===== */
 #about { padding:50px 20px; text-align:center; background:white; }
 #about h2 { margin-bottom:20px; font-size:2rem; }
-#about .vision { margin-top:20px; max-width:700px; margin-left:auto; margin-right:auto; text-align:left; }
+#about .vision { margin-top:20px; max-width:700px; margin:auto; text-align:left; }
 
 /* ===== Services ===== */
 #services { padding:50px 20px; text-align:center; background:#f0f8ff; }
@@ -79,11 +51,11 @@ header nav a:hover { color:#ffd700; }
 .programs-carousel { display:flex; overflow-x:auto; scroll-behavior:smooth; gap:20px; padding-bottom:10px; }
 .program-card { flex:0 0 250px; background:white; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition:transform 0.3s; }
 .program-card:hover { transform:scale(1.05); }
-.program-card img { width:100%; border-top-left-radius:12px; border-top-right-radius:12px; }
+.program-card img { width:100%; border-top-left-radius:12px; border-top-right-radius:12px; height:160px; object-fit:cover; }
 .program-card .info { padding:10px; text-align:left; }
 .program-card .info h4 { margin:5px 0; }
 .program-card .info p { margin:3px 0; font-size:0.9rem; }
-.program-card .info a { color:#007BFF; text-decoration:none; font-weight:bold; }
+.program-card .info a { color:#0a2e5d; text-decoration:none; font-weight:bold; }
 .program-card .info a:hover { text-decoration:underline; }
 
 /* ===== Messages ===== */
@@ -96,18 +68,18 @@ header nav a:hover { color:#ffd700; }
 #contact { padding:50px 20px; text-align:center; background:white; }
 #contact form { max-width:500px; margin:auto; display:flex; flex-direction:column; gap:10px; }
 #contact input, #contact textarea { padding:10px; border-radius:6px; border:1px solid #ccc; width:100%; }
-#contact button { padding:10px; border:none; border-radius:6px; background:#007BFF; color:white; cursor:pointer; transition:0.3s; }
-#contact button:hover { background:#0056b3; }
+#contact button { padding:10px; border:none; border-radius:6px; background:#0a2e5d; color:white; cursor:pointer; transition:0.3s; }
+#contact button:hover { background:#003366; }
 #contact .info { margin-top:20px; }
 
 /* ===== Footer ===== */
-footer { background:#003366; color:white; padding:15px; text-align:center; }
+footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
 
 /* ===== Responsive ===== */
 @media(max-width:768px){ .cards, .programs-carousel { flex-direction:column; align-items:center; } }
+
 </style>
 </head>
-
 <body>
 
 <header>
@@ -122,8 +94,12 @@ footer { background:#003366; color:white; padding:15px; text-align:center; }
 </nav>
 </header>
 
-<!-- ===== HERO WITH BACKGROUND SLIDESHOW ===== -->
+<!-- HERO WITH BACKGROUND SLIDESHOW -->
 <section id="home" class="hero">
+  <img src="theme.jpeg" class="active" alt="Church 1">
+  <img src="join us.jpeg" alt="Church 2">
+  <img src="past pic.jpeg" alt="Church 3">
+  <img src="curch.jpeg" alt="Church 4">
   <h1>Welcome to Throne of Christ Ministries</h1>
   <p>Holy Ghost Temple</p>
   <div class="buttons">
@@ -213,6 +189,18 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+// ===== HERO SLIDESHOW =====
+const slides = document.querySelectorAll(".hero img");
+let slideIndex = 0;
+function showSlides(){
+  slides.forEach(s => s.classList.remove("active"));
+  slideIndex++;
+  if(slideIndex > slides.length) slideIndex=1;
+  slides[slideIndex-1].classList.add("active");
+  setTimeout(showSlides,4000);
+}
+showSlides();
+
 // ===== Programs Carousel =====
 const programsCarousel = document.getElementById("programsCarousel");
 db.collection("programs").orderBy("date","asc").onSnapshot(snapshot=>{
@@ -262,6 +250,5 @@ function filterMessages(){
 searchInput.addEventListener("keyup", filterMessages);
 dateInput.addEventListener("change", filterMessages);
 </script>
-
 </body>
 </html>
