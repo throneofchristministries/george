@@ -315,32 +315,42 @@ btnRight.addEventListener("click", ()=>{ programsCarousel.scrollLeft += 260; });
 const messagesDiv = document.getElementById("messages");
 const searchInput = document.getElementById("searchInput");
 const dateInput = document.getElementById("dateInput");
-db.collection("messages").orderBy("date","desc").onSnapshot(snapshot=>{
-    messagesDiv.innerHTML="";
+
+function loadMessages() {
+  db.collection("messages").orderBy("date","desc").onSnapshot(snapshot=>{
+    messagesDiv.innerHTML = ""; // Clear old messages
     snapshot.forEach(doc=>{
-        const m = doc.data();
-        messagesDiv.innerHTML+=`
-        <div class="message" data-date="${m.date}">
-          <h3>${m.title}</h3>
-          <p>Date: ${m.date}</p>
-          <iframe src="${m.video}" allowfullscreen></iframe>
-          <iframe src="${m.audio}"></iframe>
-        </div>`;
+      const m = doc.data();
+      const div = document.createElement("div");
+      div.className = "message";
+      div.setAttribute("data-date", m.date);
+      div.innerHTML = `
+        <h3>${m.title}</h3>
+        <p>Date: ${m.date}</p>
+        ${m.video ? `<iframe src="${m.video}" allowfullscreen style="width:100%; height:200px;"></iframe>` : ""}
+        ${m.audio ? `<iframe src="${m.audio}" style="width:100%; height:60px;"></iframe>` : ""}
+      `;
+      messagesDiv.appendChild(div);
     });
-});
+  });
+}
 
 // ===== Messages Search =====
 function filterMessages(){
-    const text = searchInput.value.toLowerCase();
-    const date = dateInput.value;
-    messagesDiv.querySelectorAll(".message").forEach(msg=>{
-        const title = msg.innerText.toLowerCase();
-        const msgDate = msg.getAttribute("data-date");
-        msg.style.display=(title.includes(text) && (date===""||msgDate===date))?"block":"none";
-    });
+  const text = searchInput.value.toLowerCase();
+  const date = dateInput.value;
+  messagesDiv.querySelectorAll(".message").forEach(msg=>{
+    const title = msg.innerText.toLowerCase();
+    const msgDate = msg.getAttribute("data-date");
+    msg.style.display = (title.includes(text) && (date===""||msgDate===date)) ? "block" : "none";
+  });
 }
+
 searchInput.addEventListener("keyup", filterMessages);
 dateInput.addEventListener("change", filterMessages);
+
+// Load messages initially
+loadMessages();
 
 // ===== Testimonials Slider =====
 const testimonialSlider = document.getElementById("testimonialSlider");
