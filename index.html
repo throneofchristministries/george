@@ -11,11 +11,11 @@
 
 <style>
 /* ===== General ===== */
-body { margin:0; font-family: Arial, sans-serif; background:#f8f9fa; color:#333; }
+body { margin:0; font-family: Arial, sans-serif; background:#f8f9fa; color:#333; scroll-behavior: smooth; }
 header { background:#003366; color:white; padding:15px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:999; }
 header .logo { font-size:1.5rem; font-weight:bold; }
-header nav a { color:white; margin-left:15px; text-decoration:none; font-weight:bold; }
-header nav a:hover { text-decoration:underline; }
+header nav a { color:white; margin-left:15px; text-decoration:none; font-weight:bold; transition:0.3s; }
+header nav a:hover { color:#ffd700; }
 
 /* ===== Hero Section ===== */
 .hero { text-align:center; padding:50px 20px; background:#f0f8ff; position:relative; }
@@ -26,7 +26,7 @@ header nav a:hover { text-decoration:underline; }
 
 /* ===== Slideshow ===== */
 .slideshow { position:relative; max-width:900px; margin:30px auto; overflow:hidden; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); }
-.slideshow img { width:100%; display:none; border-radius:12px; }
+.slideshow img { width:100%; display:none; border-radius:12px; position:absolute; top:0; left:0; }
 .slideshow img.active { display:block; animation:fade 1s; }
 @keyframes fade { from {opacity:0.3;} to{opacity:1;} }
 
@@ -74,7 +74,6 @@ footer { background:#003366; color:white; padding:15px; text-align:center; }
 
 /* ===== Responsive ===== */
 @media(max-width:768px){ .cards, .programs-carousel { flex-direction:column; align-items:center; } }
-
 </style>
 
 </head>
@@ -93,17 +92,17 @@ footer { background:#003366; color:white; padding:15px; text-align:center; }
 </header>
 
 <section id="home" class="hero">
-<h1>Welcome to Throne of Christ Ministries</h1>
-<p>Holy Ghost Temple</p>
+  <h1>Welcome to Throne of Christ Ministries</h1>
+  <p>Holy Ghost Temple</p>
+  <div class="buttons">
+    <a href="https://facebook.com" class="btn">Facebook</a>
+    <a href="https://youtube.com" class="btn">YouTube</a>
+    <a href="https://instagram.com" class="btn">Instagram</a>
+    <a href="https://wa.me/233000000000" class="btn">WhatsApp</a>
+  </div>
+</section>
 
-<div class="buttons">
-<a href="https://facebook.com" class="btn">Facebook</a>
-<a href="https://youtube.com" class="btn">YouTube</a>
-<a href="https://instagram.com" class="btn">Instagram</a>
-<a href="https://wa.me/233000000000" class="btn">WhatsApp</a>
-</div>
-
-<!-- ===== Slideshow Photos ===== -->
+<!-- Slideshow -->
 <div class="slideshow">
 <img src="images/church1.jpg" class="active" alt="Church 1">
 <img src="images/church2.jpg" alt="Church 2">
@@ -118,7 +117,6 @@ footer { background:#003366; color:white; padding:15px; text-align:center; }
 Throne of Christ Ministries is a Bible-believing ministry committed to preaching the Gospel of Jesus Christ,
 raising disciples, and transforming lives through prayer, teaching, and outreach.
 </p>
-
 <div class="vision">
 <h3>Our Vision</h3>
 <p>To reveal Christ to the world and raise spiritually grounded believers.</p>
@@ -200,7 +198,7 @@ function showSlides(){
     slideIndex++;
     if(slideIndex > slides.length) slideIndex=1;
     slides[slideIndex-1].classList.add("active");
-    setTimeout(showSlides,4000); // 4 seconds per slide
+    setTimeout(showSlides,4000); // 4s per slide
 }
 showSlides();
 
