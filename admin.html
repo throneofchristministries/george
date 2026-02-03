@@ -4,107 +4,105 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Throne of Christ Ministries Admin</title>
-
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
-body{font-family:Arial;background:#f0f2f5;padding:20px;}
-h2{text-align:center;}
-input,textarea,button{width:100%;padding:10px;margin:6px 0;border-radius:5px;border:1px solid #ccc;}
-button{background:#0a2e5d;color:gold;font-weight:bold;cursor:pointer;transition:0.3s;}
-button:hover{background:#003366;color:#fff;}
-.tabs{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;}
-.tabs button{flex:1;min-width:120px;}
-.section{display:none;background:white;padding:15px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
-.section.active{display:block;}
-.item{border:1px solid #ccc;padding:8px;margin:8px 0;border-radius:5px;display:flex;justify-content:space-between;align-items:center;}
+body {font-family:Arial, sans-serif; background:#f0f2f5; padding:20px;}
+h2 {text-align:center;}
+input, textarea, button {width:100%; padding:10px; margin:6px 0; border-radius:5px; border:1px solid #ccc;}
+button {background:#0a2e5d; color:gold; font-weight:bold; cursor:pointer;}
+button:hover {background:#003366; color:white;}
+.tabs {display:flex; flex-wrap:wrap; gap:10px; margin:15px 0;}
+.tabs button {flex:1; min-width:120px;}
+.section {display:none; background:white; padding:15px; border-radius:8px; box-shadow:0 3px 8px rgba(0,0,0,0.1);}
+.section.active {display:block;}
+.item {border:1px solid #ccc; padding:8px; margin:8px 0; border-radius:5px; display:flex; justify-content:space-between; align-items:center;}
 </style>
 </head>
 
 <body>
-
 <h2>Throne of Christ Ministries Admin Panel</h2>
 
 <!-- Login -->
 <div id="login">
-<input id="pass" placeholder="Admin Password" type="password">
-<button onclick="login()">Login</button>
+  <input id="pass" type="password" placeholder="Admin Password">
+  <button onclick="login()">Login</button>
 </div>
 
 <!-- Admin Panel -->
 <div id="panel" style="display:none">
 
-<div class="tabs">
-<button onclick="show('msg')">Messages</button>
-<button onclick="show('prog')">Programs</button>
-<button onclick="show('test')">Testimonials</button>
-</div>
+  <!-- Tabs -->
+  <div class="tabs">
+    <button onclick="show('msgSec')">Messages</button>
+    <button onclick="show('progSec')">Programs</button>
+    <button onclick="show('testSec')">Testimonials</button>
+  </div>
 
-<!-- Messages Section -->
-<div id="msg" class="section">
-<h3>Add Message</h3>
-<input id="mTitle" placeholder="Title">
-<input id="mDate" type="date">
-<input id="mVideo" placeholder="Video Embed">
-<input id="mAudio" placeholder="Audio Link">
-<button onclick="saveMsg()">Save</button>
+  <!-- Messages Section -->
+  <div id="msgSec" class="section">
+    <h3>Add Message</h3>
+    <input id="mTitle" placeholder="Title">
+    <input id="mDate" type="date">
+    <input id="mVideo" placeholder="Video Embed Link">
+    <input id="mAudio" placeholder="Audio Link">
+    <button onclick="saveMsg()">Save</button>
 
-<h4>Existing Messages</h4>
-<div id="msgList"></div>
-</div>
+    <h4>Existing Messages</h4>
+    <div id="msgList"></div>
+  </div>
 
-<!-- Programs Section -->
-<div id="prog" class="section">
-<h3>Add Program</h3>
-<input id="pTitle" placeholder="Title">
-<input id="pDate" type="date">
-<input id="pFlyer" placeholder="Flyer Image URL">
-<button onclick="saveProg()">Save</button>
+  <!-- Programs Section -->
+  <div id="progSec" class="section">
+    <h3>Add Program</h3>
+    <input id="pTitle" placeholder="Title">
+    <input id="pDate" type="date">
+    <input id="pFlyer" placeholder="Flyer Image URL">
+    <button onclick="saveProg()">Save</button>
 
-<h4>Existing Programs</h4>
-<div id="progList"></div>
-</div>
+    <h4>Existing Programs</h4>
+    <div id="progList"></div>
+  </div>
 
-<!-- Testimonials Section -->
-<div id="test" class="section">
-<h3>Add Testimonial</h3>
-<input id="tName" placeholder="Name">
-<textarea id="tMsg" placeholder="Message"></textarea>
-<button onclick="saveTest()">Save</button>
+  <!-- Testimonials Section -->
+  <div id="testSec" class="section">
+    <h3>Add Testimonial</h3>
+    <input id="tName" placeholder="Name">
+    <textarea id="tMsg" placeholder="Message"></textarea>
+    <button onclick="saveTest()">Save</button>
 
-<h4>Existing Testimonials</h4>
-<div id="testList"></div>
-</div>
+    <h4>Existing Testimonials</h4>
+    <div id="testList"></div>
+  </div>
 
 </div>
 
 <script>
-// ===== Firebase Setup =====
 firebase.initializeApp({
   apiKey: "AIzaSyBVkn_LvrbOFKmZLoJxMsrZXqugUQvml74",
   authDomain: "throneofchristministries-6a88a.firebaseapp.com",
   projectId: "throneofchristministries-6a88a"
 });
-const db = firebase.firestore();
-const PASS = "1234";
 
-// ===== Login =====
+const db = firebase.firestore();
+const ADMIN_PASS = "1234";
+
+// Login
 function login(){
-  const p = document.getElementById("pass");
-  const loginDiv = document.getElementById("login");
-  const panelDiv = document.getElementById("panel");
-  if(p.value === PASS){
-    loginDiv.style.display = "none";
-    panelDiv.style.display = "block";
+  const pass = document.getElementById("pass").value;
+  if(pass === ADMIN_PASS){
+    document.getElementById("login").style.display="none";
+    document.getElementById("panel").style.display="block";
     loadAll();
-  } else alert("Wrong password!");
+  } else {
+    alert("Wrong password!");
+  }
 }
 
-// ===== Tabs =====
+// Tabs
 function show(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
@@ -115,86 +113,100 @@ function saveMsg(){
   const video = document.getElementById("mVideo").value;
   const audio = document.getElementById("mAudio").value;
   if(!title || !date || !video || !audio){ alert("Fill all fields"); return; }
-  db.collection("messages").add({title,date,video,audio}).then(()=>{
-    loadMsgs();
-    document.getElementById("mTitle").value="";
-    document.getElementById("mDate").value="";
-    document.getElementById("mVideo").value="";
-    document.getElementById("mAudio").value="";
-  });
+
+  db.collection("messages").add({title, date, video, audio})
+    .then(()=> {
+      document.getElementById("mTitle").value="";
+      document.getElementById("mDate").value="";
+      document.getElementById("mVideo").value="";
+      document.getElementById("mAudio").value="";
+      loadMsgs();
+    });
 }
 
 function loadMsgs(){
   const list = document.getElementById("msgList");
   list.innerHTML="";
-  db.collection("messages").orderBy("date","desc").get().then(snapshot=>{
-    snapshot.forEach(doc=>{
+  db.collection("messages").orderBy("date","desc").get().then(snap=>{
+    snap.forEach(doc=>{
       const data = doc.data();
-      list.innerHTML+=`<div class="item">${data.title} - ${data.date}<button onclick="del('messages','${doc.id}')">X</button></div>`;
+      const div = document.createElement("div");
+      div.className="item";
+      div.innerHTML=`${data.title} - ${data.date} <button onclick="del('messages','${doc.id}')">X</button>`;
+      list.appendChild(div);
     });
   });
 }
 
 // ===== Programs =====
 function saveProg(){
-  const title=document.getElementById("pTitle").value;
-  const date=document.getElementById("pDate").value;
-  const flyer=document.getElementById("pFlyer").value;
-  if(!title || !date || !flyer){ alert("Fill required fields"); return; }
-  db.collection("programs").add({title,date,flyer}).then(()=>{
-    loadProg();
-    document.getElementById("pTitle").value="";
-    document.getElementById("pDate").value="";
-    document.getElementById("pFlyer").value="";
-  });
+  const title = document.getElementById("pTitle").value;
+  const date = document.getElementById("pDate").value;
+  const flyer = document.getElementById("pFlyer").value;
+  if(!title || !date || !flyer){ alert("Fill all fields"); return; }
+
+  db.collection("programs").add({title, date, flyer})
+    .then(()=> {
+      document.getElementById("pTitle").value="";
+      document.getElementById("pDate").value="";
+      document.getElementById("pFlyer").value="";
+      loadProg();
+    });
 }
 
 function loadProg(){
   const list = document.getElementById("progList");
   list.innerHTML="";
-  db.collection("programs").orderBy("date","asc").get().then(snapshot=>{
-    snapshot.forEach(doc=>{
+  db.collection("programs").orderBy("date","asc").get().then(snap=>{
+    snap.forEach(doc=>{
       const data = doc.data();
-      list.innerHTML+=`<div class="item">${data.title} - ${data.date}<button onclick="del('programs','${doc.id}')">X</button></div>`;
+      const div = document.createElement("div");
+      div.className="item";
+      div.innerHTML=`${data.title} - ${data.date} <button onclick="del('programs','${doc.id}')">X</button>`;
+      list.appendChild(div);
     });
   });
 }
 
 // ===== Testimonials =====
 function saveTest(){
-  const name=document.getElementById("tName").value;
-  const msg=document.getElementById("tMsg").value;
-  if(!name || !msg){ alert("Fill required fields"); return; }
-  db.collection("testimonials").add({name,message:msg}).then(()=>{
-    loadTest();
-    document.getElementById("tName").value="";
-    document.getElementById("tMsg").value="";
-  });
+  const name = document.getElementById("tName").value;
+  const message = document.getElementById("tMsg").value;
+  if(!name || !message){ alert("Fill all fields"); return; }
+
+  db.collection("testimonials").add({name, message})
+    .then(()=> {
+      document.getElementById("tName").value="";
+      document.getElementById("tMsg").value="";
+      loadTest();
+    });
 }
 
 function loadTest(){
-  const list=document.getElementById("testList");
+  const list = document.getElementById("testList");
   list.innerHTML="";
-  db.collection("testimonials").get().then(snapshot=>{
-    snapshot.forEach(doc=>{
-      const data=doc.data();
-      list.innerHTML+=`<div class="item">${data.name}: ${data.message}<button onclick="del('testimonials','${doc.id}')">X</button></div>`;
+  db.collection("testimonials").get().then(snap=>{
+    snap.forEach(doc=>{
+      const data = doc.data();
+      const div = document.createElement("div");
+      div.className="item";
+      div.innerHTML=`${data.name}: ${data.message} <button onclick="del('testimonials','${doc.id}')">X</button>`;
+      list.appendChild(div);
     });
   });
 }
 
-// ===== Delete =====
-function del(col,id){
-  db.collection(col).doc(id).delete().then(loadAll);
+// ===== Delete Document =====
+function del(coll,id){
+  db.collection(coll).doc(id).delete().then(loadAll);
 }
 
-// ===== Load All =====
+// Load everything
 function loadAll(){
   loadMsgs();
   loadProg();
   loadTest();
 }
 </script>
-
 </body>
 </html>
