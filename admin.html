@@ -1,46 +1,92 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Church Admin</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Throne of Christ Ministries Admin</title>
 <link rel="stylesheet" href="style.css">
 
+<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-</head>
 
+</head>
 <body>
 
 <h2>Admin Upload Panel</h2>
 
 <div id="login">
-<input id="pass" placeholder="Admin Password">
+<input id="pass" type="password" placeholder="Admin Password">
 <button onclick="login()">Login</button>
 </div>
 
 <div id="panel" style="display:none">
-
 <input id="title" placeholder="Message Title">
 <input id="date" type="date">
 <input id="video" placeholder="Facebook Video Embed Link">
 <input id="audio" placeholder="Google Drive Audio Embed Link">
-
 <button onclick="save()">Save Message</button>
-
+<p>All messages added here will appear on the public site automatically.</p>
 </div>
 
-<script src="script.js"></script>
-
 <script>
-const ADMIN_PASSWORD="1234"; // CHANGE THIS PASSWORD
+  // ======= Firebase Setup =======
+  const firebaseConfig = {
+    apiKey: "AIzaSyBVkn_LvrbOFKmZLoJxMsrZXqugUQvml74",
+    authDomain: "throneofchristministries-6a88a.firebaseapp.com",
+    projectId: "throneofchristministries-6a88a",
+    storageBucket: "throneofchristministries-6a88a.firebasestorage.app",
+    messagingSenderId: "970066493474",
+    appId: "1:970066493474:web:99d8f66402206b90998a7b"
+  };
 
-function login(){
-if(pass.value===ADMIN_PASSWORD){
-panel.style.display="block";
-login.style.display="none";
-}else alert("Wrong password");
-}
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // ======= Admin Password =======
+  const ADMIN_PASSWORD = "1234"; // CHANGE THIS
+
+  const loginDiv = document.getElementById("login");
+  const panelDiv = document.getElementById("panel");
+  const passInput = document.getElementById("pass");
+
+  function login(){
+    if(passInput.value === ADMIN_PASSWORD){
+      panelDiv.style.display = "block";
+      loginDiv.style.display = "none";
+    } else {
+      alert("Wrong password!");
+    }
+  }
+
+  // ======= Save Message =======
+  const titleInput = document.getElementById("title");
+  const dateInput = document.getElementById("date");
+  const videoInput = document.getElementById("video");
+  const audioInput = document.getElementById("audio");
+
+  function save(){
+    if(titleInput.value === "" || dateInput.value === "" || videoInput.value === "" || audioInput.value === ""){
+      alert("Please fill all fields");
+      return;
+    }
+
+    db.collection("messages").add({
+      title: titleInput.value,
+      date: dateInput.value,
+      video: videoInput.value,
+      audio: audioInput.value
+    }).then(() => {
+      alert("Message saved successfully!");
+      titleInput.value = "";
+      dateInput.value = "";
+      videoInput.value = "";
+      audioInput.value = "";
+    }).catch(error => {
+      alert("Error saving message: " + error);
+    });
+  }
 </script>
 
 </body>
