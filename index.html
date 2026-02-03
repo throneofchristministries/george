@@ -133,7 +133,7 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
     <a href="https://wa.me/233000000000" class="btn">WhatsApp</a>
   </div>
 </section>
-<!-- ===== Upcoming Events Ticker ===== -->
+<!-- ===== Upcoming Events Ticker with Icons ===== -->
 <section id="events-ticker" style="background:#0a2e5d; color:#ffd700; padding:15px 10px; overflow:hidden; white-space:nowrap; font-weight:bold;">
   <div id="tickerContent" style="display:inline-block; padding-left:100%; will-change:transform;">
     <!-- Events will be injected here via Firebase -->
@@ -141,8 +141,19 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
 </section>
 
 <script>
-// ===== Events Ticker =====
+// ===== Events Ticker with Emojis =====
 const tickerContent = document.getElementById("tickerContent");
+
+// Function to assign emoji based on program type
+function getEventEmoji(type){
+    type = type.toLowerCase();
+    if(type.includes("worship") || type.includes("sunday")) return "🕊️";
+    if(type.includes("prayer") || type.includes("midweek")) return "🙏";
+    if(type.includes("choir") || type.includes("music")) return "🎶";
+    if(type.includes("outreach") || type.includes("special")) return "👥";
+    if(type.includes("bible") || type.includes("study")) return "📖";
+    return "✨"; // default emoji
+}
 
 // Fetch upcoming programs from Firebase
 db.collection("programs").orderBy("date","asc").limit(10).onSnapshot(snapshot => {
@@ -150,7 +161,8 @@ db.collection("programs").orderBy("date","asc").limit(10).onSnapshot(snapshot =>
     snapshot.forEach(doc => {
         const p = doc.data();
         const dateStr = new Date(p.date).toLocaleDateString(); // format nicely
-        tickerContent.innerHTML += `⚡ ${p.title} - ${dateStr} &nbsp;&nbsp;&nbsp;&nbsp;`;
+        const emoji = getEventEmoji(p.title);
+        tickerContent.innerHTML += `${emoji} ${p.title} - ${dateStr} &nbsp;&nbsp;&nbsp;&nbsp;`;
     });
 });
 
@@ -158,7 +170,7 @@ db.collection("programs").orderBy("date","asc").limit(10).onSnapshot(snapshot =>
 let tickerPos = 0;
 function animateTicker(){
     tickerPos -= 1; // speed of scroll
-    if(-tickerPos > tickerContent.offsetWidth) tickerPos = ticker.offsetWidth;
+    if(-tickerPos > tickerContent.offsetWidth) tickerPos = tickerContent.parentElement.offsetWidth;
     tickerContent.style.transform = `translateX(${tickerPos}px)`;
     requestAnimationFrame(animateTicker);
 }
