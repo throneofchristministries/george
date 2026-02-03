@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Church Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+
+<h2>Admin Upload Panel</h2>
+
+<div id="login">
+<input id="pass" placeholder="Admin Password">
+<button onclick="login()">Login</button>
+</div>
+
+<div id="panel" style="display:none">
+
+<input id="title" placeholder="Message Title">
+<input id="date" type="date">
+<input id="video" placeholder="Facebook Video Embed Link">
+<input id="audio" placeholder="Google Drive Audio Embed Link">
+
+<button onclick="save()">Save Message</button>
+
+</div>
+
+<script src="script.js"></script>
+
+<script>
+const ADMIN_PASSWORD="1234"; // CHANGE THIS PASSWORD
+
+function login(){
+if(pass.value===ADMIN_PASSWORD){
+panel.style.display="block";
+login.style.display="none";
+}else alert("Wrong password");
+}
+</script>
+
+</body>
+</html>
