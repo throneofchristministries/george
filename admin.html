@@ -50,8 +50,8 @@ button:hover {background:#003366; color:white;}
     <h3>Add Message</h3>
     <input id="mTitle" placeholder="Title">
     <input id="mDate" type="date">
-    <input id="mVideo" placeholder="Video Embed Link">
-    <input id="mAudio" placeholder="Audio Link">
+    <input id="mVideo" placeholder="Video Embed Link (Facebook/YouTube)">
+    <input id="mAudio" placeholder="Audio Link (Google Drive Direct Link)">
     <button onclick="saveMsg()">Save Message</button>
     <p id="msgFeedback"></p>
 
@@ -123,9 +123,20 @@ function saveMsg(){
   const audio = document.getElementById("mAudio").value.trim();
   const feedback = document.getElementById("msgFeedback");
 
-  if(!title || !date || !video || !audio){ feedback.innerText="Fill all fields!"; feedback.className="error"; return; }
+  if(!title || !date){ 
+    feedback.innerText="Title and Date are required!"; 
+    feedback.className="error"; 
+    return; 
+  }
 
-  db.collection("messages").add({title,date,video,audio})
+  // Optional: convert Google Drive sharing link to direct download
+  let audioLink = audio;
+  if(audio.includes("drive.google.com") && !audio.includes("uc?export=download")){
+    const idMatch = audio.match(/[-\w]{25,}/);
+    if(idMatch) audioLink = `https://drive.google.com/uc?export=download&id=${idMatch[0]}`;
+  }
+
+  db.collection("messages").add({title,date,video,audio:audioLink})
     .then(()=> {
       feedback.innerText="Message saved successfully!";
       feedback.className="success";
