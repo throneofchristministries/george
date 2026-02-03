@@ -20,7 +20,17 @@ header nav a { color:white; margin-left:15px; text-decoration:none; font-weight:
 header nav a:hover { color:#ffd700; }
 
 /* ===== Hero Section ===== */
-.hero { position: relative; text-align: center; height:80vh; color: white; display:flex; flex-direction: column; justify-content:center; align-items:center; overflow:hidden; }
+.hero {
+  position: relative;
+  height:80vh;
+  display:flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  color:white;
+  overflow:hidden;
+}
 .hero::after { content:""; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1; }
 .hero h1, .hero p, .hero .buttons { position: relative; z-index:2; }
 .hero h1 { font-size:3rem; margin-bottom:10px; }
@@ -28,9 +38,22 @@ header nav a:hover { color:#ffd700; }
 .hero .buttons a { display:inline-block; margin:5px; padding:12px 25px; background:#ffd700; color:#0a2e5d; border-radius:8px; text-decoration:none; font-weight:bold; transition:0.3s; }
 .hero .buttons a:hover { background:#e6c200; color:#fff; }
 
-/* ===== Slideshow Images ===== */
-.hero img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:1s; z-index:0; }
-.hero img.active { opacity:1; }
+/* ===== Hero Background Slideshow ===== */
+.hero-slide {
+  position:absolute;
+  top:0; left:0; width:100%; height:100%;
+  background-size:cover;
+  background-position:center;
+  z-index:0;
+  animation: fadeSlide 16s infinite;
+}
+@keyframes fadeSlide {
+  0%   { background-image: url('theme.jpeg'); }
+  25%  { background-image: url('join us.jpeg'); }
+  50%  { background-image: url('past pic.jpeg'); }
+  75%  { background-image: url('curch.jpeg'); }
+  100% { background-image: url('theme.jpeg'); }
+}
 
 /* ===== About ===== */
 #about { padding:50px 20px; text-align:center; background:white; }
@@ -76,6 +99,7 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
 
 /* ===== Responsive ===== */
 @media(max-width:768px){ .cards, .programs-carousel { flex-direction:column; align-items:center; } }
+
 </style>
 </head>
 <body>
@@ -92,12 +116,9 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
 </nav>
 </header>
 
-<!-- HERO WITH BACKGROUND SLIDESHOW -->
+<!-- HERO WITH SMOOTH BACKGROUND SLIDESHOW -->
 <section id="home" class="hero">
-  <img src="theme.jpeg" class="active" alt="Church 1">
-  <img src="join us.jpeg" alt="Church 2">
-  <img src="past pic.jpeg" alt="Church 3">
-  <img src="curch.jpeg" alt="Church 4">
+  <div class="hero-slide"></div>
   <h1>Welcome to Throne of Christ Ministries</h1>
   <p>Holy Ghost Temple</p>
   <div class="buttons">
@@ -186,18 +207,6 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-
-// ===== Hero Slideshow =====
-const slides = document.querySelectorAll(".hero img");
-let slideIndex = 0;
-function showSlides(){
-  slides.forEach(s => s.classList.remove("active"));
-  slideIndex++;
-  if(slideIndex > slides.length) slideIndex=1;
-  slides[slideIndex-1].classList.add("active");
-  setTimeout(showSlides,4000);
-}
-showSlides();
 
 // ===== Programs Carousel =====
 const programsCarousel = document.getElementById("programsCarousel");
