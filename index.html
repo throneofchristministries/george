@@ -133,7 +133,38 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
     <a href="https://wa.me/233000000000" class="btn">WhatsApp</a>
   </div>
 </section>
+<!-- ===== Upcoming Events Ticker ===== -->
+<section id="events-ticker" style="background:#0a2e5d; color:#ffd700; padding:15px 10px; overflow:hidden; white-space:nowrap; font-weight:bold;">
+  <div id="tickerContent" style="display:inline-block; padding-left:100%; will-change:transform;">
+    <!-- Events will be injected here via Firebase -->
+  </div>
+</section>
 
+<script>
+// ===== Events Ticker =====
+const tickerContent = document.getElementById("tickerContent");
+
+// Fetch upcoming programs from Firebase
+db.collection("programs").orderBy("date","asc").limit(10).onSnapshot(snapshot => {
+    tickerContent.innerHTML = ""; // clear existing
+    snapshot.forEach(doc => {
+        const p = doc.data();
+        const dateStr = new Date(p.date).toLocaleDateString(); // format nicely
+        tickerContent.innerHTML += `⚡ ${p.title} - ${dateStr} &nbsp;&nbsp;&nbsp;&nbsp;`;
+    });
+});
+
+// Animate ticker
+let tickerPos = 0;
+function animateTicker(){
+    tickerPos -= 1; // speed of scroll
+    if(-tickerPos > tickerContent.offsetWidth) tickerPos = ticker.offsetWidth;
+    tickerContent.style.transform = `translateX(${tickerPos}px)`;
+    requestAnimationFrame(animateTicker);
+}
+animateTicker();
+</script>
+  
 <!-- Welcome / Intro -->
 <section id="welcome" style="padding:50px 20px; text-align:center; background:#f0f8ff;">
   <h2>Join Us Today</h2>
