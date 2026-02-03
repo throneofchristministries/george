@@ -9,28 +9,94 @@
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
+<style>
+body { font-family: Arial, sans-serif; background:#f0f2f5; margin:0; padding:20px;}
+h2 { text-align:center; }
+input, textarea, select, button { padding:10px; margin:5px 0; width:100%; border-radius:5px; border:1px solid #ccc;}
+button { background:#0a2e5d; color:#ffd700; font-weight:bold; cursor:pointer; transition:0.3s;}
+button:hover { background:#003366; color:#fff; }
+.tab { display:flex; gap:10px; justify-content:center; margin-bottom:20px; }
+.tab button { flex:1; }
+.section { display:none; background:white; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+.section.active { display:block; }
+.item { border:1px solid #ccc; padding:10px; margin:10px 0; border-radius:6px; display:flex; justify-content:space-between; align-items:center;}
+.item button { width:auto; padding:5px 10px; font-size:0.9rem;}
+</style>
 </head>
 <body>
 
-<h2>Admin Upload Panel</h2>
+<h2>Throne of Christ Ministries Admin Panel</h2>
 
+<!-- Login -->
 <div id="login">
-<input id="pass" type="password" placeholder="Admin Password">
-<button onclick="login()">Login</button>
+  <input id="pass" type="password" placeholder="Admin Password">
+  <button onclick="login()">Login</button>
 </div>
 
+<!-- Admin Panel -->
 <div id="panel" style="display:none">
-<input id="title" placeholder="Message Title">
-<input id="date" type="date">
-<input id="video" placeholder="Facebook Video Embed Link">
-<input id="audio" placeholder="Google Drive Audio Embed Link">
-<button onclick="save()">Save Message</button>
-<p>All messages added here will appear on the public site automatically.</p>
+
+  <!-- Tabs -->
+  <div class="tab">
+    <button onclick="showSection('messagesSec')">Messages</button>
+    <button onclick="showSection('programsSec')">Programs</button>
+    <button onclick="showSection('testimonialsSec')">Testimonials</button>
+    <button onclick="showSection('logoSec')">Church Logo</button>
+  </div>
+
+  <!-- Messages Section -->
+  <div id="messagesSec" class="section">
+    <h3>Add Message</h3>
+    <input id="title" placeholder="Message Title">
+    <input id="date" type="date">
+    <input id="video" placeholder="Facebook Video Embed Link">
+    <input id="audio" placeholder="Google Drive Audio Embed Link">
+    <button onclick="saveMessage()">Save Message</button>
+
+    <h4>Existing Messages</h4>
+    <div id="messagesList"></div>
+  </div>
+
+  <!-- Programs Section -->
+  <div id="programsSec" class="section">
+    <h3>Add Program</h3>
+    <input id="progTitle" placeholder="Program Title">
+    <input id="progDate" type="date">
+    <input id="progFlyer" placeholder="Flyer Image URL">
+    <input id="progLink" placeholder="External Link (optional)">
+    <button onclick="saveProgram()">Save Program</button>
+
+    <h4>Existing Programs</h4>
+    <div id="programsList"></div>
+  </div>
+
+  <!-- Testimonials Section -->
+  <div id="testimonialsSec" class="section">
+    <h3>Add Testimonial</h3>
+    <input id="testName" placeholder="Name">
+    <textarea id="testMessage" placeholder="Message"></textarea>
+    <input id="testPhoto" placeholder="Photo URL (optional)">
+    <button onclick="saveTestimonial()">Save Testimonial</button>
+
+    <h4>Existing Testimonials</h4>
+    <div id="testimonialsList"></div>
+  </div>
+
+  <!-- Church Logo Section -->
+  <div id="logoSec" class="section">
+    <h3>Upload Church Logo</h3>
+    <input type="file" id="logoFile">
+    <button onclick="uploadLogo()">Upload Logo</button>
+    <h4>Current Logo</h4>
+    <img id="currentLogo" src="" alt="Logo" style="max-width:150px; display:block; margin-top:10px;">
+  </div>
+
 </div>
 
 <script>
-  // ======= Firebase Setup =======
+  // ===== Firebase Setup =====
   const firebaseConfig = {
     apiKey: "AIzaSyBVkn_LvrbOFKmZLoJxMsrZXqugUQvml74",
     authDomain: "throneofchristministries-6a88a.firebaseapp.com",
@@ -39,14 +105,12 @@
     messagingSenderId: "970066493474",
     appId: "1:970066493474:web:99d8f66402206b90998a7b"
   };
-
-  // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+  const storage = firebase.storage();
 
-  // ======= Admin Password =======
+  // ===== Admin Password =====
   const ADMIN_PASSWORD = "1234"; // CHANGE THIS
-
   const loginDiv = document.getElementById("login");
   const panelDiv = document.getElementById("panel");
   const passInput = document.getElementById("pass");
@@ -55,39 +119,146 @@
     if(passInput.value === ADMIN_PASSWORD){
       panelDiv.style.display = "block";
       loginDiv.style.display = "none";
+      loadMessages();
+      loadPrograms();
+      loadTestimonials();
+      loadLogo();
     } else {
       alert("Wrong password!");
     }
   }
 
-  // ======= Save Message =======
-  const titleInput = document.getElementById("title");
-  const dateInput = document.getElementById("date");
-  const videoInput = document.getElementById("video");
-  const audioInput = document.getElementById("audio");
+  // ===== Section Tabs =====
+  function showSection(sec){
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+  }
 
-  function save(){
-    if(titleInput.value === "" || dateInput.value === "" || videoInput.value === "" || audioInput.value === ""){
-      alert("Please fill all fields");
-      return;
+  // ===== Messages =====
+  function saveMessage(){
+    const title = document.getElementById("title").value;
+    const date = document.getElementById("date").value;
+    const video = document.getElementById("video").value;
+    const audio = document.getElementById("audio").value;
+
+    if(!title || !date || !video || !audio){ alert("Fill all fields"); return; }
+
+    db.collection("messages").add({title, date, video, audio})
+      .then(()=>{ alert("Message saved!"); loadMessages(); 
+        document.getElementById("title").value = "";
+        document.getElementById("date").value = "";
+        document.getElementById("video").value = "";
+        document.getElementById("audio").value = "";
+      });
+  }
+
+  function loadMessages(){
+    const list = document.getElementById("messagesList");
+    list.innerHTML = "";
+    db.collection("messages").orderBy("date","desc").get().then(snapshot=>{
+      snapshot.forEach(doc=>{
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<span>${data.title} - ${data.date}</span> <button onclick="deleteDoc('messages','${doc.id}')">Delete</button>`;
+        list.appendChild(div);
+      });
+    });
+  }
+
+  // ===== Programs =====
+  function saveProgram(){
+    const title = document.getElementById("progTitle").value;
+    const date = document.getElementById("progDate").value;
+    const flyer = document.getElementById("progFlyer").value;
+    const link = document.getElementById("progLink").value;
+
+    if(!title || !date || !flyer){ alert("Fill required fields"); return; }
+
+    db.collection("programs").add({title, date, flyer, link})
+      .then(()=>{ alert("Program saved!"); loadPrograms();
+        document.getElementById("progTitle").value = "";
+        document.getElementById("progDate").value = "";
+        document.getElementById("progFlyer").value = "";
+        document.getElementById("progLink").value = "";
+      });
+  }
+
+  function loadPrograms(){
+    const list = document.getElementById("programsList");
+    list.innerHTML = "";
+    db.collection("programs").orderBy("date","asc").get().then(snapshot=>{
+      snapshot.forEach(doc=>{
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<span>${data.title} - ${data.date}</span> <button onclick="deleteDoc('programs','${doc.id}')">Delete</button>`;
+        list.appendChild(div);
+      });
+    });
+  }
+
+  // ===== Testimonials =====
+  function saveTestimonial(){
+    const name = document.getElementById("testName").value;
+    const message = document.getElementById("testMessage").value;
+    const photo = document.getElementById("testPhoto").value;
+
+    if(!name || !message){ alert("Fill required fields"); return; }
+
+    db.collection("testimonials").add({name, message, photo})
+      .then(()=>{ alert("Testimonial saved!"); loadTestimonials();
+        document.getElementById("testName").value = "";
+        document.getElementById("testMessage").value = "";
+        document.getElementById("testPhoto").value = "";
+      });
+  }
+
+  function loadTestimonials(){
+    const list = document.getElementById("testimonialsList");
+    list.innerHTML = "";
+    db.collection("testimonials").get().then(snapshot=>{
+      snapshot.forEach(doc=>{
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<span>${data.name}: ${data.message}</span> <button onclick="deleteDoc('testimonials','${doc.id}')">Delete</button>`;
+        list.appendChild(div);
+      });
+    });
+  }
+
+  // ===== Delete Document =====
+  function deleteDoc(collection,id){
+    if(confirm("Are you sure?")){
+      db.collection(collection).doc(id).delete().then(()=>{ 
+        alert("Deleted successfully");
+        if(collection==="messages") loadMessages();
+        if(collection==="programs") loadPrograms();
+        if(collection==="testimonials") loadTestimonials();
+      });
     }
+  }
 
-    db.collection("messages").add({
-      title: titleInput.value,
-      date: dateInput.value,
-      video: videoInput.value,
-      audio: audioInput.value
-    }).then(() => {
-      alert("Message saved successfully!");
-      titleInput.value = "";
-      dateInput.value = "";
-      videoInput.value = "";
-      audioInput.value = "";
-    }).catch(error => {
-      alert("Error saving message: " + error);
+  // ===== Logo Upload =====
+  function uploadLogo(){
+    const file = document.getElementById("logoFile").files[0];
+    if(!file){ alert("Select a file"); return; }
+    const ref = storage.ref('logo/' + file.name);
+    ref.put(file).then(()=> ref.getDownloadURL()).then(url=>{
+      db.collection("settings").doc("logo").set({url});
+      loadLogo();
+      alert("Logo uploaded!");
+    });
+  }
+
+  function loadLogo(){
+    db.collection("settings").doc("logo").get().then(doc=>{
+      if(doc.exists){
+        document.getElementById("currentLogo").src = doc.data().url;
+      }
     });
   }
 </script>
-
 </body>
 </html>
