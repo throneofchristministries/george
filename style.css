@@ -168,3 +168,63 @@ nav{margin-top:10px;}
 .program-card .info {
   padding: 10px;
 }
+#programs {
+  padding: 50px 20px;
+  background: #f0f8ff;
+  text-align: center;
+}
+
+#programs h2 {
+  margin-bottom: 30px;
+  font-size: 2rem;
+}
+
+.programs-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 20px;
+  padding-bottom: 10px;
+}
+
+.program-card {
+  flex: 0 0 250px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.3s;
+}
+
+.program-card:hover {
+  transform: scale(1.05);
+}
+
+.program-card img {
+  width: 100%;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.program-card .info {
+  padding: 10px;
+  text-align: left;
+}
+
+.program-card .info h4 {
+  margin: 5px 0;
+}
+
+.program-card .info p {
+  margin: 3px 0;
+  font-size: 0.9rem;
+}
+
+.program-card .info a {
+  color: #007BFF;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.program-card .info a:hover {
+  text-decoration: underline;
+}
