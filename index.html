@@ -135,7 +135,25 @@ Messages appear automatically. Use admin panel to add new messages.
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+// Load programs from Firebase
+const programsCarousel = document.getElementById("programsCarousel");
 
+db.collection("programs").orderBy("date", "asc").onSnapshot(snapshot => {
+  programsCarousel.innerHTML = "";
+  snapshot.forEach(doc => {
+    const p = doc.data();
+    programsCarousel.innerHTML += `
+      <div class="program-card">
+        <img src="${p.flyer}" alt="${p.title}">
+        <div class="info">
+          <h4>${p.title}</h4>
+          <p>${p.date}</p>
+          ${p.link ? `<a href="${p.link}" target="_blank">View Details</a>` : ''}
+        </div>
+      </div>
+    `;
+  });
+});
   const messagesDiv = document.getElementById("messages");
   const searchInput = document.getElementById("searchInput");
   const dateInput = document.getElementById("dateInput");
