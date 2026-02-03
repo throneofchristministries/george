@@ -1,8 +1,8 @@
 // STEP 1: PASTE YOUR FIREBASE CONFIG HERE
 const firebaseConfig = {
-apiKey: "YOUR_API_KEY",
-authDomain: "YOUR_DOMAIN",
-projectId: "YOUR_PROJECT_ID",
+apiKey: "AIzaSyBVkn_LvrbOFKmZLoJxMsrZXqugUQvml74",
+authDomain: "throneofchristministries-6a88a.firebaseapp.com",
+projectId: "throneofchristministries-6a88a",
 };
 
 firebase.initializeApp(firebaseConfig);
