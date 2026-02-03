@@ -10,6 +10,74 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
+<style>
+/* ===== General Styles ===== */
+body { font-family: Arial, sans-serif; margin:0; padding:0; }
+header { background: #003366; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center; }
+header .logo { font-size:1.5rem; font-weight:bold; }
+header nav a { color:white; margin-left:15px; text-decoration:none; font-weight:bold; }
+header nav a:hover { text-decoration:underline; }
+
+.hero { text-align:center; padding:50px 20px; background:#f0f8ff; }
+.hero h1 { font-size:2.5rem; margin-bottom:10px; }
+.hero p { font-size:1.2rem; margin-bottom:20px; }
+.hero .buttons a { display:inline-block; margin:5px; padding:10px 20px; background:#007BFF; color:white; border-radius:6px; text-decoration:none; transition:0.3s; }
+.hero .buttons a:hover { background:#0056b3; }
+
+/* ===== Slideshow ===== */
+.slideshow { position:relative; max-width:800px; margin:30px auto; overflow:hidden; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2); }
+.slideshow img { width:100%; animation:fade 12s infinite; position:absolute; top:0; left:0; opacity:0; }
+.slideshow img:nth-child(1) { animation-delay:0s; }
+.slideshow img:nth-child(2) { animation-delay:3s; }
+.slideshow img:nth-child(3) { animation-delay:6s; }
+.slideshow img:nth-child(4) { animation-delay:9s; }
+@keyframes fade { 0%{opacity:0;} 8%{opacity:1;} 25%{opacity:1;} 33%{opacity:0;} 100%{opacity:0;} }
+
+/* ===== About Section ===== */
+#about { padding:50px 20px; text-align:center; }
+#about h2 { margin-bottom:20px; font-size:2rem; }
+#about .vision { margin-top:20px; text-align:left; max-width:700px; margin-left:auto; margin-right:auto; }
+
+/* ===== Service Times ===== */
+#services { padding:50px 20px; text-align:center; }
+#services h2 { margin-bottom:30px; font-size:2rem; }
+.cards { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; }
+.card { background:white; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2); flex:0 0 250px; }
+
+/* ===== Programs Carousel ===== */
+#programs { padding:50px 20px; background:#f0f8ff; text-align:center; }
+#programs h2 { margin-bottom:30px; font-size:2rem; }
+.programs-carousel { display:flex; overflow-x:auto; scroll-behavior:smooth; gap:20px; padding-bottom:10px; }
+.program-card { flex:0 0 250px; background:white; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition:transform 0.3s; }
+.program-card:hover { transform:scale(1.05); }
+.program-card img { width:100%; border-top-left-radius:12px; border-top-right-radius:12px; }
+.program-card .info { padding:10px; text-align:left; }
+.program-card .info h4 { margin:5px 0; }
+.program-card .info p { margin:3px 0; font-size:0.9rem; }
+.program-card .info a { color:#007BFF; text-decoration:none; font-weight:bold; }
+.program-card .info a:hover { text-decoration:underline; }
+
+/* ===== Messages Section ===== */
+#media { padding:50px 20px; text-align:center; }
+#media h2 { margin-bottom:30px; font-size:2rem; }
+#media .search-box { margin-bottom:20px; }
+#media input { padding:8px; margin:5px; border-radius:6px; border:1px solid #ccc; }
+
+/* ===== Contact Section ===== */
+#contact { padding:50px 20px; text-align:center; background:#f5f5f5; }
+#contact form { max-width:500px; margin:auto; display:flex; flex-direction:column; gap:10px; }
+#contact input, #contact textarea { padding:10px; border-radius:6px; border:1px solid #ccc; width:100%; }
+#contact button { padding:10px; border:none; border-radius:6px; background:#007BFF; color:white; cursor:pointer; }
+#contact button:hover { background:#0056b3; }
+#contact .info { margin-top:20px; }
+
+/* ===== Footer ===== */
+footer { background:#003366; color:white; padding:15px; text-align:center; }
+
+/* ===== Responsive ===== */
+@media(max-width:768px){ .cards, .programs-carousel { flex-direction:column; align-items:center; } }
+</style>
+
 </head>
 <body>
 
@@ -19,6 +87,7 @@
 <a href="#home">Home</a>
 <a href="#about">About</a>
 <a href="#services">Services</a>
+<a href="#programs">Programs</a>
 <a href="#media">Messages</a>
 <a href="#contact">Contact</a>
 </nav>
@@ -27,20 +96,25 @@
 <section id="home" class="hero">
 <h1>Welcome to Throne of Christ Ministries</h1>
 <p>Holy Ghost Temple</p>
-<section id="programs">
-  <h2>Upcoming Programs</h2>
-  <div class="programs-carousel" id="programsCarousel">
-    <!-- Flyers will be loaded dynamically here -->
-  </div>
-</section>
+
+<!-- Buttons -->
 <div class="buttons">
 <a href="https://facebook.com" class="btn">Facebook</a>
 <a href="https://youtube.com" class="btn">YouTube</a>
 <a href="https://instagram.com" class="btn">Instagram</a>
 <a href="https://wa.me/233000000000" class="btn">WhatsApp</a>
 </div>
+
+<!-- ===== Slideshow Photos ===== -->
+<div class="slideshow">
+<img src="images/church1.jpg" alt="Church Photo 1">
+<img src="images/church2.jpg" alt="Church Photo 2">
+<img src="images/church3.jpg" alt="Church Photo 3">
+<img src="images/church4.jpg" alt="Church Photo 4">
+</div>
 </section>
 
+<!-- About Section -->
 <section id="about">
 <h2>About Us</h2>
 <p>
@@ -57,65 +131,53 @@ raising disciples, and transforming lives through prayer, teaching, and outreach
 </div>
 </section>
 
+<!-- Services -->
 <section id="services">
 <h2>Service Times</h2>
-
 <div class="cards">
 <div class="card">
 <h3>Sunday Worship</h3>
 <p>9:00 AM – 12:00 PM</p>
 </div>
-
 <div class="card">
 <h3>Midweek Service</h3>
 <p>Wednesday – 6:00 PM</p>
 </div>
-
 <div class="card">
 <h3>Prayer Meeting</h3>
 <p>Friday – 6:00 PM</p>
 </div>
 </div>
 </section>
+
+<!-- Programs Section -->
 <section id="programs">
-  <h2>Upcoming Programs</h2>
-  <div class="programs-carousel" id="programsCarousel">
-    <!-- Flyers will load dynamically from Firebase -->
-  </div>
+<h2>Upcoming Programs</h2>
+<div class="programs-carousel" id="programsCarousel">
+<!-- Flyers will load dynamically from Firebase -->
+</div>
 </section>
 
-<!-- ================= MESSAGES SECTION ================= -->
-
+<!-- Messages Section -->
 <section id="media">
 <h2>Video & Audio Messages</h2>
-
 <div class="search-box">
 <input type="text" id="searchInput" placeholder="Search by program or title">
 <input type="date" id="dateInput">
 </div>
-
-<div id="messages">
-<!-- Messages will be loaded dynamically from Firebase -->
-</div>
-
-<p class="note">
-Messages appear automatically. Use admin panel to add new messages.
-</p>
-
+<div id="messages"></div>
+<p class="note">Messages appear automatically. Use admin panel to add new messages.</p>
 </section>
 
-<!-- ================= CONTACT ================= -->
-
+<!-- Contact Section -->
 <section id="contact">
 <h2>Contact Us</h2>
-
 <form>
 <input type="text" placeholder="Your Name" required>
 <input type="email" placeholder="Your Email" required>
 <textarea placeholder="Your Message"></textarea>
 <button type="submit">Send Message</button>
 </form>
-
 <div class="info">
 <p>📍 Location: Ghana</p>
 <p>📞 Phone: +233 XXXXXXXX</p>
@@ -127,53 +189,46 @@ Messages appear automatically. Use admin panel to add new messages.
 <p>© 2026 Throne of Christ Ministries</p>
 </footer>
 
+<!-- ===== Scripts ===== -->
 <script>
-  // ======= Firebase Setup =======
-  const firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyBVkn_LvrbOFKmZLoJxMsrZXqugUQvml74",
     authDomain: "throneofchristministries-6a88a.firebaseapp.com",
     projectId: "throneofchristministries-6a88a",
     storageBucket: "throneofchristministries-6a88a.firebasestorage.app",
     messagingSenderId: "970066493474",
     appId: "1:970066493474:web:99d8f66402206b90998a7b"
-  };
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-// Load programs from Firebase
+// ===== Programs Section =====
 const programsCarousel = document.getElementById("programsCarousel");
-
-db.collection("programs").orderBy("date", "asc").onSnapshot(snapshot => {
-  programsCarousel.innerHTML = "";
-  snapshot.forEach(doc => {
-    const p = doc.data();
-    programsCarousel.innerHTML += `
-      <div class="program-card">
-        <img src="${p.flyer}" alt="${p.title}">
-        <div class="info">
-          <h4>${p.title}</h4>
-          <p>${p.date}</p>
-          ${p.link ? `<a href="${p.link}" target="_blank">View Details</a>` : ''}
-        </div>
-      </div>
-    `;
-  });
+db.collection("programs").orderBy("date","asc").onSnapshot(snapshot=>{
+    programsCarousel.innerHTML="";
+    snapshot.forEach(doc=>{
+        const p=doc.data();
+        programsCarousel.innerHTML+=`
+        <div class="program-card">
+            <img src="${p.flyer}" alt="${p.title}">
+            <div class="info">
+                <h4>${p.title}</h4>
+                <p>${p.date}</p>
+                ${p.link?`<a href="${p.link}" target="_blank">View Details</a>`:""}
+            </div>
+        </div>`;
+    });
 });
-  const messagesDiv = document.getElementById("messages");
-  const searchInput = document.getElementById("searchInput");
-  const dateInput = document.getElementById("dateInput");
 
-  let messagesData = [];
-
-  // ======= Load messages from Firebase =======
-  db.collection("messages").orderBy("date", "desc").onSnapshot(snapshot => {
-    messagesData = [];
-    messagesDiv.innerHTML = "";
-    snapshot.forEach(doc => {
-      const m = doc.data();
-      messagesData.push(m);
-      messagesDiv.innerHTML += `
+// ===== Messages Section =====
+const messagesDiv = document.getElementById("messages");
+const searchInput = document.getElementById("searchInput");
+const dateInput = document.getElementById("dateInput");
+db.collection("messages").orderBy("date","desc").onSnapshot(snapshot=>{
+    messagesDiv.innerHTML="";
+    snapshot.forEach(doc=>{
+        const m=doc.data();
+        messagesDiv.innerHTML+=`
         <div class="message" data-date="${m.date}">
           <h3>${m.title}</h3>
           <p>Date: ${m.date}</p>
@@ -181,28 +236,10 @@ db.collection("programs").orderBy("date", "asc").onSnapshot(snapshot => {
           <iframe src="${m.audio}"></iframe>
         </div>`;
     });
-  });
+});
 
-  // ======= Search Function =======
-  function filterMessages(){
-    const text = searchInput.value.toLowerCase();
-    const date = dateInput.value;
-
-    messagesDiv.querySelectorAll(".message").forEach(msg => {
-      const title = msg.innerText.toLowerCase();
-      const msgDate = msg.getAttribute("data-date");
-
-      if(title.includes(text) && (date === "" || msgDate === date)){
-        msg.style.display = "block";
-      } else {
-        msg.style.display = "none";
-      }
-    });
-  }
-
-  searchInput.addEventListener("keyup", filterMessages);
-  dateInput.addEventListener("change", filterMessages);
-</script>
-
-</body>
-</html>
+function filterMessages(){
+    const text=searchInput.value.toLowerCase();
+    const date=dateInput.value;
+    messagesDiv.querySelectorAll(".message").forEach(msg=>{
+        const title=msg.innerText.toLowerCas
