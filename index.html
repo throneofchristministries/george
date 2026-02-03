@@ -10,28 +10,13 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
-/* ===== General ===== */
 body { margin:0; font-family: Arial, sans-serif; background:#f8f9fa; color:#333; scroll-behavior: smooth; }
-
-/* ===== Header ===== */
 header { background:#0a2e5d; color:white; padding:15px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:999; }
 header .logo { display:flex; align-items:center; font-size:1.5rem; font-weight:bold; }
-header .logo img { height:50px; margin-right:10px; } /* Logo image */
+header .logo img { height:50px; margin-right:10px; }
 header nav a { color:white; margin-left:15px; text-decoration:none; font-weight:bold; transition:0.3s; }
 header nav a:hover { color:#ffd700; }
-
-/* ===== Hero Section ===== */
-.hero {
-  position: relative;
-  height:80vh;
-  display:flex;
-  flex-direction: column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  color:white;
-  overflow:hidden;
-}
+.hero { position: relative; height:80vh; display:flex; flex-direction: column; justify-content:center; align-items:center; text-align:center; color:white; overflow:hidden; }
 .hero::after { content:""; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1; }
 .hero h1, .hero p, .hero .buttons { position: relative; z-index:2; }
 .hero h1 { font-size:3rem; margin-bottom:10px; text-shadow:2px 2px 6px rgba(0,0,0,0.6); }
@@ -41,29 +26,26 @@ header nav a:hover { color:#ffd700; }
 .hero img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0; transition: opacity 1.5s ease-in-out; z-index:0; }
 .hero img.active { opacity:1; }
 
-/* ===== Quick Links Section ===== */
+/* Quick Links */
 #quick-links { background:#ffd700; color:#0a2e5d; padding:30px 20px; text-align:center; }
 #quick-links h2 { margin-bottom:20px; }
 #quick-links div { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; }
-#quick-links a {
-  background:white; color:#0a2e5d; padding:20px 30px; border-radius:12px; text-decoration:none;
-  font-weight:bold; flex:0 0 200px; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition:0.3s;
-}
+#quick-links a { background:white; color:#0a2e5d; padding:20px 30px; border-radius:12px; text-decoration:none; font-weight:bold; flex:0 0 200px; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition:0.3s; }
 #quick-links a:hover { background:#0a2e5d; color:#ffd700; transform:translateY(-5px); }
 
-/* ===== About ===== */
+/* About */
 #about { padding:50px 20px; text-align:center; background:white; }
 #about h2 { margin-bottom:20px; font-size:2rem; }
 #about .vision { margin-top:20px; max-width:700px; margin:auto; text-align:left; }
 
-/* ===== Services ===== */
+/* Services */
 #services { padding:50px 20px; text-align:center; background:#f0f8ff; }
 #services h2 { margin-bottom:30px; font-size:2rem; }
 .cards { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; }
 .card { background:white; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2); flex:0 0 250px; transition:transform 0.3s; }
 .card:hover { transform:scale(1.05); }
 
-/* ===== Programs Carousel ===== */
+/* Programs Carousel */
 .carousel-container { position: relative; display: flex; align-items: center; justify-content: center; margin:50px 0; }
 .carousel-btn { position: absolute; top:50%; transform:translateY(-50%); background: rgba(10,46,93,0.7); color:#fff; border:none; border-radius:50%; width:40px; height:40px; font-size:1.5rem; cursor:pointer; z-index:2; transition:0.3s; }
 .carousel-btn:hover { background:#0a2e5d; }
@@ -79,21 +61,21 @@ header nav a:hover { color:#ffd700; }
 .program-card .info a { color:#0a2e5d; text-decoration:none; font-weight:bold; }
 .program-card .info a:hover { text-decoration:underline; }
 
-/* ===== Testimonials ===== */
+/* Testimonials */
 #testimonials { padding:50px 20px; background:#f0f8ff; text-align:center; }
 .testimonial-slide { opacity:0; transition:opacity 1s; }
 .testimonial-slide.active { opacity:1; }
 
-/* ===== CTA Banner ===== */
+/* CTA */
 #cta { padding:40px 20px; background:#ffd700; color:#0a2e5d; text-align:center; }
 
-/* ===== Media Section ===== */
+/* Media Section */
 #media { padding:50px 20px; text-align:center; background:#f0f8ff; }
 #media h2 { margin-bottom:30px; font-size:2rem; }
 #media .search-box { margin-bottom:20px; }
 #media input { padding:8px; margin:5px; border-radius:6px; border:1px solid #ccc; }
 
-/* ===== Contact ===== */
+/* Contact */
 #contact { padding:50px 20px; text-align:center; background:white; }
 #contact form { max-width:500px; margin:auto; display:flex; flex-direction:column; gap:10px; }
 #contact input, #contact textarea { padding:10px; border-radius:6px; border:1px solid #ccc; width:100%; }
@@ -101,10 +83,10 @@ header nav a:hover { color:#ffd700; }
 #contact button:hover { background:#003366; }
 #contact .info { margin-top:20px; }
 
-/* ===== Footer ===== */
+/* Footer */
 footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
 
-/* ===== Responsive ===== */
+/* Responsive */
 @media(max-width:768px){
   .cards, .programs-carousel, #quick-links div { flex-direction:column; align-items:center; }
   #quick-links a { width:80%; margin:auto; }
@@ -116,7 +98,7 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
 <!-- HEADER -->
 <header>
   <div class="logo">
-    <img src="chrch logo.jpeg" alt="Church Logo"> <!-- Insert church logo here -->
+    <img src="chrch logo.jpeg" alt="Church Logo">
     Throne of Christ Ministries
   </div>
   <nav>
@@ -203,11 +185,7 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
 <!-- TESTIMONIALS -->
 <section id="testimonials">
   <h2>What People Say</h2>
-  <div id="testimonialSlider" style="max-width:700px; margin:auto; position:relative; overflow:hidden; height:150px;">
-    <div class="testimonial-slide active"><p>"Attending Throne of Christ Ministries changed my life!"</p><strong>-  Pearl Donkor.</strong></div>
-    <div class="testimonial-slide"><p>"The youth programs are amazing! I feel spiritually connected."</p><strong>- Rebecca Quansah.</strong></div>
-    <div class="testimonial-slide"><p>"I found a family here. Prayer meetings bring peace and hope."</p><strong>- Coffie Isaac Duncan.</strong></div>
-  </div>
+  <div id="testimonialSlider" style="max-width:700px; margin:auto; position:relative; overflow:hidden; height:150px;"></div>
 </section>
 
 <!-- CTA -->
@@ -293,17 +271,6 @@ db.collection("programs").orderBy("date","asc").onSnapshot(snapshot=>{
             </div>
         </div>`;
     });
-
-    function autoSlide() {
-        if(!carouselPaused){
-            const cardWidth = programsCarousel.querySelector(".program-card")?.offsetWidth || 250;
-            const maxScroll = programsCarousel.scrollWidth - programsCarousel.clientWidth;
-            programsCarousel.scrollLeft += 1;
-            if(programsCarousel.scrollLeft >= maxScroll) programsCarousel.scrollLeft = 0;
-        }
-        requestAnimationFrame(autoSlide);
-    }
-    autoSlide();
 });
 
 programsCarousel.addEventListener("mouseenter",()=>{carouselPaused=true;});
@@ -318,7 +285,7 @@ const dateInput = document.getElementById("dateInput");
 
 function loadMessages() {
   db.collection("messages").orderBy("date","desc").onSnapshot(snapshot=>{
-    messagesDiv.innerHTML = ""; // Clear old messages
+    messagesDiv.innerHTML = "";
     snapshot.forEach(doc=>{
       const m = doc.data();
       const div = document.createElement("div");
@@ -334,8 +301,8 @@ function loadMessages() {
     });
   });
 }
+loadMessages();
 
-// ===== Messages Search =====
 function filterMessages(){
   const text = searchInput.value.toLowerCase();
   const date = dateInput.value;
@@ -345,19 +312,18 @@ function filterMessages(){
     msg.style.display = (title.includes(text) && (date===""||msgDate===date)) ? "block" : "none";
   });
 }
-
 searchInput.addEventListener("keyup", filterMessages);
 dateInput.addEventListener("change", filterMessages);
 
-// Load messages initially
-loadMessages();
-
 // ===== Testimonials Slider =====
 const testimonialSlider = document.getElementById("testimonialSlider");
-
 function loadTestimonials() {
   db.collection("testimonials").get().then(snapshot => {
-    testimonialSlider.innerHTML = ""; // clear old slides
+    testimonialSlider.innerHTML = "";
+    if(snapshot.empty){
+      testimonialSlider.innerHTML = `<div class="testimonial-slide active"><p>No testimonials yet.</p></div>`;
+      return;
+    }
     snapshot.forEach(doc => {
       const t = doc.data();
       const div = document.createElement("div");
@@ -366,7 +332,6 @@ function loadTestimonials() {
       testimonialSlider.appendChild(div);
     });
 
-    // Activate slider if there are testimonials
     const slides = testimonialSlider.querySelectorAll(".testimonial-slide");
     if(slides.length > 0){
       let tIndex = 0;
@@ -379,7 +344,6 @@ function loadTestimonials() {
     }
   });
 }
-
 loadTestimonials();
 </script>
 
