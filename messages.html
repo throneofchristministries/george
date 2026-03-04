@@ -1,0 +1,112 @@
+<!-- Combined Messages Section with Audio Upload and Search -->
+<section id="messages" style="padding:50px 20px; background:#fff3e0; text-align:center;">
+  <h2 style="margin-bottom:30px; font-size:2rem;">Messages</h2>
+  
+  <!-- Existing Messages -->
+  <div class="messages-container" style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px;">
+    <div class="message" style="background:#ffffff; padding:20px; border-radius:12px; max-width:350px; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+      <p style="font-style:italic;">"This ministry has truly transformed my life. I feel loved and supported every time I attend."</p>
+      <h4 style="margin-top:10px;">- Jane D.</h4>
+    </div>
+    <div class="message" style="background:#ffffff; padding:20px; border-radius:12px; max-width:350px; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+      <p style="font-style:italic;">"The sermons inspire me to live a better life and deepen my faith."</p>
+      <h4 style="margin-top:10px;">- Pastor John</h4>
+    </div>
+    <div class="message" style="background:#ffffff; padding:20px; border-radius:12px; max-width:350px; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+      <p style="font-style:italic;">"Being part of this community has brought so much joy and purpose into my life."</p>
+      <h4 style="margin-top:10px;">- Samuel K.</h4>
+    </div>
+  </div>
+</section>
+
+<!-- Audio Messages Upload & Search -->
+<section id="audio-messages" style="padding:50px 20px; background:#f0f4c3;">
+  <h2 style="text-align:center; margin-bottom:20px;">Audio Messages</h2>
+  
+  <!-- Upload Form -->
+  <form id="uploadForm" style="max-width:500px; margin:auto; display:flex; flex-direction:column; gap:10px;">
+    <input type="text" id="messageTitle" placeholder="Title" required />
+    <input type="date" id="messageDate" required />
+    <input type="file" id="audioFile" accept="audio/*" required />
+    <button type="submit" style="padding:10px; background:#4caf50; color:#fff; border:none; border-radius:5px;">Upload Message</button>
+  </form>
+
+  <!-- Search Filters -->
+  <div style="margin-top:30px; max-width:500px; margin:auto;">
+    <input type="text" id="searchTitle" placeholder="Search by Title" style="width:48%; padding:8px;" />
+    <input type="date" id="searchDate" style="width:48%; padding:8px; margin-left:4%;" />
+    <button onclick="searchMessages()" style="margin-top:10px; padding:8px 16px;">Search</button>
+  </div>
+
+  <!-- Messages List -->
+  <div id="messagesList" style="margin-top:30px; display:flex; flex-direction:column; gap:15px;"></div>
+</section>
+
+<script>
+  // Store messages in an array
+  let messages = [];
+
+  // Handle upload form submission
+  document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const title = document.getElementById('messageTitle').value;
+    const date = document.getElementById('messageDate').value;
+    const fileInput = document.getElementById('audioFile');
+    const file = fileInput.files[0];
+
+    if (file && title && date) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        // Save message info
+        messages.push({
+          title: title,
+          date: date,
+          audioSrc: e.target.result
+        });
+        displayMessages(messages);
+        // Reset form
+        document.getElementById('uploadForm').reset();
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Function to display messages
+  function displayMessages(msgs) {
+    const container = document.getElementById('messagesList');
+    container.innerHTML = '';
+    msgs.forEach(msg => {
+      const div = document.createElement('div');
+      div.style.padding = '10px';
+      div.style.border = '1px solid #ccc';
+      div.style.borderRadius = '8px';
+
+      div.innerHTML = `
+        <h4 style="margin:0;">${msg.title}</h4>
+        <p style="margin:5px 0;">Date: ${msg.date}</p>
+        <audio controls style="width:100%;">
+          <source src="${msg.audioSrc}" type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  // Search function for filtering messages
+  function searchMessages() {
+    const titleQuery = document.getElementById('searchTitle').value.toLowerCase();
+    const dateQuery = document.getElementById('searchDate').value;
+
+    const filtered = messages.filter(msg => {
+      const matchesTitle = msg.title.toLowerCase().includes(titleQuery);
+      const matchesDate = dateQuery ? msg.date === dateQuery : true;
+      return matchesTitle && matchesDate;
+    });
+
+    displayMessages(filtered);
+  }
+
+  // Initial display of messages (if any)
+  displayMessages(messages);
+</script>
