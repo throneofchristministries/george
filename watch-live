@@ -1,0 +1,16 @@
+<!-- Watch Live Section -->
+<section id="watch-live" style="padding:50px 20px; background:#fff3e0; text-align:center; font-family:Arial, sans-serif;">
+  <h2 style="font-size:2rem; color:#fb8c00; margin-bottom:20px;">Watch Live</h2>
+  
+  <!-- Embedded Video Stream (e.g., YouTube or other platform) -->
+  <div style="margin-bottom:20px;">
+    <iframe width="80%" height="450" src="https://www.youtube.com/embed/VIDEO_ID" 
+            frameborder="0" allowfullscreen style="border-radius:8px;">
+    </iframe>
+  </div>
+  
+  <!-- Or link to a live stream -->
+  <p style="font-size:1.2rem; color:#e65100;">
+    Or join us live on <a href="https://yourstreamlink.com" target="_blank" style="color:#ef6c00; text-decoration:none;">our streaming page</a>.
+  </p>
+</section>
