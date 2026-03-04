@@ -1,0 +1,48 @@
+<!-- Gallery Section -->
+<section id="gallery" style="padding:50px 20px; background:#fff; font-family:Arial, sans-serif;">
+  <h2 style="text-align:center; margin-bottom:30px; font-size:2rem; color:#00796b;">Gallery</h2>
+  
+  <!-- Gallery Grid -->
+  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
+    <!-- Image 1 -->
+    <div style="position:relative; overflow:hidden; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+      <img src="https://source.unsplash.com/400x300/?nature,water" alt="Nature Water" style="width:100%; height:auto; display:block; transition:transform 0.3s ease;">
+      <!-- Optional overlay on hover -->
+      <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); opacity:0; transition:opacity 0.3s ease;">
+        <p style="color:#fff; position:absolute; bottom:10px; width:100%; text-align:center; font-size:1.2rem;">Nature Water</p>
+      </div>
+    </div>
+    
+    <!-- Image 2 -->
+    <div style="position:relative; overflow:hidden; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+      <img src="https://source.unsplash.com/400x300/?mountains" alt="Mountains" style="width:100%; height:auto; display:block; transition:transform 0.3s ease;">
+      <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); opacity:0; transition:opacity 0.3s ease;">
+        <p style="color:#fff; position:absolute; bottom:10px; width:100%; text-align:center; font-size:1.2rem;">Mountains</p>
+      </div>
+    </div>
+    
+    <!-- Image 3 -->
+    <div style="position:relative; overflow:hidden; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+      <img src="https://source.unsplash.com/400x300/?beach" alt="Beach" style="width:100%; height:auto; display:block; transition:transform 0.3s ease;">
+      <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); opacity:0; transition:opacity 0.3s ease;">
+        <p style="color:#fff; position:absolute; bottom:10px; width:100%; text-align:center; font-size:1.2rem;">Beach</p>
+      </div>
+    </div>
+    
+    <!-- Add more images as needed -->
+  </div>
+</section>
+
+<script>
+  // Optional: Add hover effect to show overlay
+  document.querySelectorAll('#gallery div').forEach(div => {
+    div.addEventListener('mouseenter', () => {
+      div.children[1].style.opacity = 1;
+      div.children[0].style.transform = 'scale(1.05)';
+    });
+    div.addEventListener('mouseleave', () => {
+      div.children[1].style.opacity = 0;
+      div.children[0].style.transform = 'scale(1)';
+    });
+  });
+</script>
