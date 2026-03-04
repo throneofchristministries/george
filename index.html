@@ -1,26 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Throne of Christ Ministries</title>
 
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
+<!-- Google Analytics (replace YOUR_TRACKING_ID) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_TRACKING_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'YOUR_TRACKING_ID');
+</script>
+
 <style>
+/* Basic Reset & Body */
 body { margin:0; font-family: Arial, sans-serif; background:#f8f9fa; color:#333; scroll-behavior: smooth; }
 header { background:#0a2e5d; color:white; padding:15px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:999; }
 header .logo { display:flex; align-items:center; font-size:1.5rem; font-weight:bold; }
 header .logo img { height:50px; margin-right:10px; }
+header nav { display:flex; flex-wrap:wrap; }
 header nav a { color:white; margin-left:15px; text-decoration:none; font-weight:bold; transition:0.3s; }
 header nav a:hover { color:#ffd700; }
+
+/* Responsive Hamburger Menu */
+.menu-toggle { display:none; font-size:2rem; cursor:pointer; }
+@media(max-width:768px){
+  header nav { display:none; flex-direction:column; width:100%; background:#0a2e5d; position:absolute; top:60px; left:0; }
+  header nav.show { display:flex; }
+  .menu-toggle { display:block; }
+}
+
+/* Hero Style */
 .hero { position: relative; height:80vh; display:flex; flex-direction: column; justify-content:center; align-items:center; text-align:center; color:white; overflow:hidden; }
 .hero::after { content:""; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1; }
-.hero h1, .hero p, .hero .buttons { position: relative; z-index:2; }
 .hero h1 { font-size:3rem; margin-bottom:10px; text-shadow:2px 2px 6px rgba(0,0,0,0.6); }
 .hero p { font-size:1.3rem; margin-bottom:20px; text-shadow:1px 1px 4px rgba(0,0,0,0.6); }
+.hero .buttons { position: relative; z-index:2; }
 .hero .buttons a { display:inline-block; margin:5px; padding:12px 25px; background:#ffd700; color:#0a2e5d; border-radius:8px; text-decoration:none; font-weight:bold; transition:0.3s; }
 .hero .buttons a:hover { background:#e6c200; color:#fff; }
 .hero img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0; transition: opacity 1.5s ease-in-out; z-index:0; }
@@ -68,12 +89,15 @@ header nav a:hover { color:#ffd700; }
 
 /* CTA */
 #cta { padding:40px 20px; background:#ffd700; color:#0a2e5d; text-align:center; }
+#cta h2 { margin-bottom:20px; }
+#cta p { margin-bottom:20px; }
+#cta a { display:inline-block; padding:12px 25px; background:#0a2e5d; color:#ffd700; border-radius:8px; font-weight:bold; text-decoration:none; }
 
 /* Media Section */
 #media { padding:50px 20px; text-align:center; background:#f0f8ff; }
 #media h2 { margin-bottom:30px; font-size:2rem; }
-#media .search-box { margin-bottom:20px; }
-#media input { padding:8px; margin:5px; border-radius:6px; border:1px solid #ccc; }
+#media .search-box { margin-bottom:20px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+#media input { padding:8px; margin:5px; border-radius:6px; border:1px solid #ccc; max-width:200px; width:100%; }
 .message iframe { width:100%; max-width:560px; height:315px; border:none; }
 
 /* Contact */
@@ -84,45 +108,46 @@ header nav a:hover { color:#ffd700; }
 #contact button:hover { background:#003366; }
 #contact .info { margin-top:20px; }
 
-/* Footer */
 footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
 
-/* Responsive */
+/* Responsive for smaller screens */
 @media(max-width:768px){
   .cards, .programs-carousel, #quick-links div { flex-direction:column; align-items:center; }
   #quick-links a { width:80%; margin:auto; }
-  .message iframe { height:200px; }
+  #media iframe { height:200px; }
+  header nav { display:none; }
+  header nav.show { display:flex; }
+  .menu-toggle { display:block; }
 }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- HEADER with Responsive Hamburger -->
 <header>
   <div class="logo">
-    <img src="chrch logo.jpeg" alt="Church Logo">
+    <img src="chrch logo.jpeg" alt="Church Logo" />
     Throne of Christ Ministries International
   </div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="services.html">Services</a>
-    <a href="programs.html">Programs</a>
-    <a href="media.html">Messages</a>
-    <a href="contact.html">Contact</a>
-    <a href="contact.html">Gallery</a>
-    <a href="donate.html">Donate</a>
-
-
+  <div class="menu-toggle" id="menu-toggle">☰</div>
+  <nav id="navbar">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#programs">Programs</a>
+    <a href="#testimonials">Messages</a>
+    <a href="#contact">Contact</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#donate">Donate</a>
   </nav>
 </header>
 
-<!-- HERO -->
+<!-- HERO with Slideshow & Background -->
 <section id="home" class="hero">
-  <img src="theme2026.jpeg" class="active" alt="Church 1">
-  <img src="join us.jpeg" alt="Church 2">
-  <img src="past pic.jpeg" alt="Church 3">
-  <img src="curch.jpeg" alt="Church 4">
+  <img src="theme2026.jpeg" class="active" alt="Church 1" />
+  <img src="join us.jpeg" alt="Church 2" />
+  <img src="past pic.jpeg" alt="Church 3" />
+  <img src="curch.jpeg" alt="Church 4" />
   <h1>Welcome to Throne of Christ Ministries International</h1>
   <p>Holy Ghost Temple</p>
   <div class="buttons">
@@ -147,10 +172,7 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
 <!-- ABOUT -->
 <section id="about">
   <h2>About Us</h2>
-  <p>
-    Throne of Christ Ministries is a Bible-believing ministry committed to preaching the Gospel of Jesus Christ,
-    raising disciples, and transforming lives through prayer, teaching, and outreach.
-  </p>
+  <p>Throne of Christ Ministries is a Bible-believing ministry committed to preaching the Gospel of Jesus Christ, raising disciples, and transforming lives through prayer, teaching, and outreach.</p>
   <div class="vision">
     <h3>Our Vision</h3>
     <p>To reveal Christ to the world and raise spiritually grounded believers.</p>
@@ -159,7 +181,7 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
   </div>
 </section>
 
-<!-- SERVICES -->
+<!-- SERVICE TIMES -->
 <section id="services">
   <h2>Service Times</h2>
   <div class="cards">
@@ -178,13 +200,13 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
   </div>
 </section>
 
-<!-- PROGRAMS CAROUSEL -->
+<!-- UPCOMING PROGRAMS - CAROUSEL -->
 <section id="programs">
   <h2>Upcoming Programs</h2>
   <div class="carousel-container">
-    <button class="carousel-btn left">&#10094;</button>
+    <button class="carousel-btn left" id="carouselLeft">&#10094;</button>
     <div class="programs-carousel" id="programsCarousel"></div>
-    <button class="carousel-btn right">&#10095;</button>
+    <button class="carousel-btn right" id="carouselRight">&#10095;</button>
   </div>
 </section>
 
@@ -194,34 +216,49 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
   <div id="testimonialSlider" style="max-width:700px; margin:auto; position:relative; overflow:hidden; height:150px;"></div>
 </section>
 
-<!-- CTA -->
+<!-- CALL TO ACTION -->
 <section id="cta">
   <h2>Become Part of Our Mission</h2>
   <p>Participate in our ministry programs, support our community outreach, or volunteer your skills. Together, we can make a difference.</p>
   <a href="#contact" style="display:inline-block; margin-top:20px; padding:12px 25px; background:#0a2e5d; color:#ffd700; border-radius:8px; font-weight:bold; text-decoration:none;">Get Involved</a>
 </section>
 
-<!-- MEDIA -->
+<!-- MEDIA Messages -->
 <section id="media">
   <h2>Video & Audio Messages</h2>
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Search by program or title">
-    <input type="date" id="dateInput">
+    <input type="text" id="searchInput" placeholder="Search by program or title" />
+    <input type="date" id="dateInput" />
   </div>
   <div id="messages"></div>
   <p class="note">Messages appear automatically. Use admin panel to add new messages.</p>
 </section>
 
+<!-- GALLERY -->
+<section id="gallery" style="padding:50px 20px; background:#f0f8ff; text-align:center;">
+  <h2>Gallery</h2>
+  <div class="gallery" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+    <img src="gallery1.jpg" style="width:200px; cursor:pointer;" onclick="openLightbox(this.src)" />
+    <img src="gallery2.jpg" style="width:200px; cursor:pointer;" onclick="openLightbox(this.src)" />
+    <!-- Add more images as needed -->
+  </div>
+</section>
+
+<!-- Lightbox for Gallery -->
+<div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); align-items:center; justify-content:center; z-index:9999;">
+  <img id="lightbox-img" style="max-width:90%; max-height:90%; border-radius:10px;" />
+</div>
+
 <!-- CONTACT -->
 <section id="contact">
   <h2>Contact Us</h2>
   <form>
-    <input type="text" placeholder="Your Name" required>
-    <input type="email" placeholder="Your Email" required>
+    <input type="text" placeholder="Your Name" required />
+    <input type="email" placeholder="Your Email" required />
     <textarea placeholder="Your Message"></textarea>
     <button type="submit">Send Message</button>
   </form>
-  <div class="info">
+  <div class="info" style="margin-top:20px;">
     <p>📍 Location: Ghana</p>
     <p>📞 Phone: +233 244360246 , +233 553346520, +233 551737175 , 233 204655510</p>
     <p>✉ Email: throneofchristministries2020@gmail.com</p>
@@ -233,70 +270,82 @@ footer { background:#0a2e5d; color:white; padding:15px; text-align:center; }
   <p>© 2026 Throne of Christ Ministries</p>
 </footer>
 
+<!-- Scripts for Features -->
 <script>
 // ===== Firebase Setup =====
 const firebaseConfig = {
-    apiKey: "AIzaSyBVkn_LvrbOFKmZLoJxMsrZXqugUQvml74",
-    authDomain: "throneofchristministries-6a88a.firebaseapp.com",
-    projectId: "throneofchristministries-6a88a",
-    storageBucket: "throneofchristministries-6a88a.firebasestorage.app",
-    messagingSenderId: "970066493474",
-    appId: "1:970066493474:web:99d8f66402206b90998a7b"
+  apiKey: "AIzaSyBVkn_LvrbOFKmZLoJxMsrZXqugUQvml74",
+  authDomain: "throneofchristministries-6a88a.firebaseapp.com",
+  projectId: "throneofchristministries-6a88a",
+  storageBucket: "throneofchristministries-6a88a.firebaseapp.com",
+  messagingSenderId: "970066493474",
+  appId: "1:970066493474:web:99d8f66402206b90998a7b"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ===== Hero Slideshow =====
-const heroSlides = document.querySelectorAll(".hero img");
+// ===== Responsive Hamburger Menu =====
+const menuToggle = document.getElementById('menu-toggle');
+const navbar = document.getElementById('navbar');
+menuToggle.onclick = () => {
+  navbar.classList.toggle('show');
+};
+
+// ===== Hero Slideshow with Fade =====
+const heroSlides = document.querySelectorAll('.hero img');
 let heroIndex = 0;
 function crossfadeSlides() {
-  heroSlides.forEach(s => s.classList.remove("active"));
-  heroSlides[heroIndex].classList.add("active");
+  heroSlides.forEach(s => s.classList.remove('active'));
+  heroSlides[heroIndex].classList.add('active');
   heroIndex = (heroIndex + 1) % heroSlides.length;
   setTimeout(crossfadeSlides, 5000);
 }
 crossfadeSlides();
 
+// ===== Background Image Animation (optional) - skipped for simplicity =====
+
 // ===== Programs Carousel =====
-const programsCarousel = document.getElementById("programsCarousel");
-const btnLeft = document.querySelector(".carousel-btn.left");
-const btnRight = document.querySelector(".carousel-btn.right");
-db.collection("programs").orderBy("date","asc").onSnapshot(snapshot=>{
-    programsCarousel.innerHTML="";
-    snapshot.forEach(doc=>{
-        const p = doc.data();
-        programsCarousel.innerHTML+=`
-        <div class="program-card">
-            <img src="${p.flyer}" alt="${p.title}">
-            <div class="info">
-                <h4>${p.title}</h4>
-                <p>${p.date}</p>
-                ${p.link?`<a href="${p.link}" target="_blank">View Details</a>`:""}
-            </div>
-        </div>`;
-    });
+const programsCarousel = document.getElementById('programsCarousel');
+const btnLeft = document.getElementById('carouselLeft');
+const btnRight = document.getElementById('carouselRight');
+
+db.collection('programs').orderBy('date','asc').onSnapshot(snapshot => {
+  programsCarousel.innerHTML = '';
+  snapshot.forEach(doc => {
+    const p = doc.data();
+    programsCarousel.innerHTML += `
+      <div class="program-card">
+        <img src="${p.flyer}" alt="${p.title}" />
+        <div class="info">
+          <h4>${p.title}</h4>
+          <p>${p.date}</p>
+          ${p.link ? `<a href="${p.link}" target="_blank">View Details</a>` : ''}
+        </div>
+      </div>
+    `;
+  });
 });
-btnLeft.addEventListener("click", ()=>{ programsCarousel.scrollLeft -= 260; });
-btnRight.addEventListener("click", ()=>{ programsCarousel.scrollLeft += 260; });
+btnLeft.onclick = () => { programsCarousel.scrollLeft -= 260; };
+btnRight.onclick = () => { programsCarousel.scrollLeft += 260; };
 
 // ===== Messages Section =====
-const messagesDiv = document.getElementById("messages");
-const searchInput = document.getElementById("searchInput");
-const dateInput = document.getElementById("dateInput");
+const messagesDiv = document.getElementById('messages');
+const searchInput = document.getElementById('searchInput');
+const dateInput = document.getElementById('dateInput');
 
 function loadMessages() {
-  db.collection("messages").orderBy("date","desc").onSnapshot(snapshot=>{
-    messagesDiv.innerHTML = "";
-    snapshot.forEach(doc=>{
+  db.collection('messages').orderBy('date','desc').onSnapshot(snapshot => {
+    messagesDiv.innerHTML = '';
+    snapshot.forEach(doc => {
       const m = doc.data();
-      const div = document.createElement("div");
-      div.className = "message";
-      div.setAttribute("data-date", m.date);
+      const div = document.createElement('div');
+      div.className = 'message';
+      div.setAttribute('data-date', m.date);
       div.innerHTML = `
         <h3>${m.title}</h3>
         <p>Date: ${m.date}</p>
-        ${m.video ? m.video : ""}
-        ${m.audio ? `<audio controls style="width:100%;" src="${m.audio}"></audio>` : ""}
+        ${m.video ? m.video : ''}
+        ${m.audio ? `<audio controls style="width:100%;" src="${m.audio}"></audio>` : ''}
       `;
       messagesDiv.appendChild(div);
     });
@@ -304,48 +353,72 @@ function loadMessages() {
 }
 loadMessages();
 
-function filterMessages(){
+function filterMessages() {
   const text = searchInput.value.toLowerCase();
   const date = dateInput.value;
-  messagesDiv.querySelectorAll(".message").forEach(msg=>{
+  document.querySelectorAll('.message').forEach(msg => {
     const title = msg.innerText.toLowerCase();
-    const msgDate = msg.getAttribute("data-date");
-    msg.style.display = (title.includes(text) && (date===""||msgDate===date)) ? "block" : "none";
+    const msgDate = msg.getAttribute('data-date');
+    msg.style.display = (title.includes(text) && (date === '' || msgDate === date)) ? 'block' : 'none';
   });
 }
-searchInput.addEventListener("keyup", filterMessages);
-dateInput.addEventListener("change", filterMessages);
+searchInput.onkeyup = filterMessages;
+dateInput.onchange = filterMessages;
 
 // ===== Testimonials Slider =====
-const testimonialSlider = document.getElementById("testimonialSlider");
+const testimonialSlider = document.getElementById('testimonialSlider');
 function loadTestimonials() {
-  db.collection("testimonials").get().then(snapshot => {
-    testimonialSlider.innerHTML = "";
-    if(snapshot.empty){
+  db.collection('testimonials').get().then(snapshot => {
+    testimonialSlider.innerHTML = '';
+    if (snapshot.empty) {
       testimonialSlider.innerHTML = `<div class="testimonial-slide active"><p>No testimonials yet.</p></div>`;
       return;
     }
     snapshot.forEach(doc => {
       const t = doc.data();
-      const div = document.createElement("div");
-      div.className = "testimonial-slide";
+      const div = document.createElement('div');
+      div.className = 'testimonial-slide';
       div.innerHTML = `<p>"${t.message}"</p><strong>- ${t.name}</strong>`;
       testimonialSlider.appendChild(div);
     });
-
-    const slides = testimonialSlider.querySelectorAll(".testimonial-slide");
-    if(slides.length > 0){
+    const slides = testimonialSlider.querySelectorAll('.testimonial-slide');
+    if (slides.length > 0) {
       let tIndex = 0;
-      slides[tIndex].classList.add("active");
-      setInterval(()=>{
-        slides.forEach(s => s.classList.remove("active"));
+      slides.forEach(s => s.classList.remove('active'));
+      slides[tIndex].classList.add('active');
+      setInterval(() => {
+        slides.forEach(s => s.classList.remove('active'));
         tIndex = (tIndex + 1) % slides.length;
-        slides[tIndex].classList.add("active");
+        slides[tIndex].classList.add('active');
       }, 6000);
     }
   });
 }
 loadTestimonials();
+
+// ===== Lightbox Gallery =====
+function openLightbox(src) {
+  document.getElementById('lightbox').style.display='flex';
+  document.getElementById('lightbox-img').src=src;
+}
+document.getElementById('lightbox').onclick = () => {
+  document.getElementById('lightbox').style.display='none';
+};
+
+// ===== Responsive Scroll to Top Button =====
+const scrollTopBtn = document.createElement('button');
+scrollTopBtn.innerHTML='↑ Top';
+scrollTopBtn.id='scrollTopBtn';
+scrollTopBtn.style='display:none; position:fixed; bottom:20px; right:20px; padding:10px; background:#0a2e5d; color:#fff; border:none; border-radius:5px; cursor:pointer; z-index:9999;';
+document.body.appendChild(scrollTopBtn);
+window.onscroll=()=>{ scrollTopBtn.style.display=window.scrollY>300?'block':'none'; };
+scrollTopBtn.onclick=()=>{ window.scrollTo({top:0,behavior:'smooth'}); };
+
+// ===== Hamburger menu toggle for mobile =====
+const menuToggle = document.getElementById('menu-toggle');
+menuToggle.onclick=()=> {
+  document.getElementById('navbar').classList.toggle('show');
+};
 </script>
 
 </body>
